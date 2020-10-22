@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "games",
+  "info": {
+    "name": "Game"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "numPlayers": {
+      "type": "integer"
+    },
+    "users": {
+      "plugin": "users-permissions",
+      "collection": "user",
+      "via": "game"
+    }
+  }
+}

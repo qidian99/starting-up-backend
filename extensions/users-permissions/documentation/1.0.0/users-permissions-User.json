@@ -1250,6 +1250,34 @@
                 "type": "string"
               }
             }
+          },
+          "game": {
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "numPlayers": {
+                "type": "integer"
+              },
+              "users": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
+              }
+            }
           }
         }
       },
@@ -1286,6 +1314,9 @@
             "default": false
           },
           "role": {
+            "type": "string"
+          },
+          "game": {
             "type": "string"
           },
           "created_by": {
