@@ -1,0 +1,69 @@
+{
+  "name": "strapi-plugin-graphql",
+  "version": "3.1.7",
+  "description": "This is the description of the plugin.",
+  "strapi": {
+    "name": "graphql",
+    "icon": "plug",
+    "description": "Adds GraphQL endpoint with default API methods."
+  },
+  "scripts": {
+    "test": "echo \"no tests yet\""
+  },
+  "dependencies": {
+    "@apollo/federation": "^0.20.1",
+    "apollo-server-koa": "2.18.1",
+    "dataloader": "^1.4.0",
+    "glob": "^7.1.6",
+    "graphql": "^14.7.0",
+    "graphql-depth-limit": "^1.1.0",
+    "graphql-iso-date": "^3.6.1",
+    "graphql-playground-middleware-koa": "^1.6.20",
+    "graphql-tools": "4.0.6",
+    "graphql-type-json": "0.3.2",
+    "graphql-type-long": "^0.1.1",
+    "koa-compose": "^4.1.0",
+    "lodash": "4.17.20",
+    "pluralize": "^8.0.0",
+    "strapi-utils": "3.1.7"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.1",
+    "koa": "^2.13.0",
+    "rimraf": "3.0.2"
+  },
+  "author": "A Strapi developer",
+  "maintainers": [
+    "A Strapi developer"
+  ],
+  "engines": {
+    "node": ">=10.16.0 <13",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/qidian99/strapi-plugin-graphql.git"
+  },
+  "keywords": [
+    "graphql",
+    "strapi",
+    "node",
+    "js"
+  ],
+  "bugs": {
+    "url": "https://github.com/qidian99/strapi-plugin-graphql/issues"
+  },
+  "homepage": "https://github.com/qidian99/strapi-plugin-graphql#readme",
+  "peerDependencies": {
+    "strapi": "3.1.7",
+    "strapi-admin": "3.1.7",
+    "strapi-connector-mongoose": "3.1.7",
+    "strapi-plugin-content-manager": "3.1.7",
+    "strapi-plugin-content-type-builder": "3.1.7",
+    "strapi-plugin-documentation": "3.1.7",
+    "strapi-plugin-email": "3.1.7",
+    "strapi-plugin-upload": "3.1.7",
+    "strapi-plugin-users-permissions": "3.1.7"
+  }
+}
