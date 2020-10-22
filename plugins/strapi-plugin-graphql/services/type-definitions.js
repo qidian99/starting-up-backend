@@ -16,7 +16,9 @@ const types = require('./type-builder');
 const { mergeSchemas, convertToParams, convertToQuery, amountLimiting } = require('./utils');
 const { toSDL, getTypeDescription } = require('./schema-definitions');
 const { toSingular, toPlural } = require('./naming');
-const { buildQuery, buildMutation } = require('./resolvers-builder');
+// const { buildQuery, buildMutation } = require('./resolvers-builder');
+const { buildQuery, buildMutation, buildSubscription } = require('./resolvers-builder');
+
 const { actionExists } = require('./utils');
 
 const isQueryEnabled = (schema, name) => {
@@ -25,6 +27,10 @@ const isQueryEnabled = (schema, name) => {
 
 const isMutationEnabled = (schema, name) => {
   return _.get(schema, `resolver.Mutation.${name}`) !== false;
+};
+
+const isSubscriptionEnabled = (schema, name) => {
+  return _.get(schema, ['resolver', 'Subscription', name]) !== false;
 };
 
 const isNotPrivate = _.curry((model, attributeName) => {
@@ -328,6 +334,13 @@ const buildSingleType = model => {
     mergeSchemas(localSchema, mutationSchema);
   });
 
+  if (model.lifecycles)
+    Object.keys(model.lifecycles).forEach(action => {
+      const subscriptionSchema = buildSubscriptionTypeDef({ model, action }, { _schema });
+
+      mergeSchemas(localSchema, subscriptionSchema);
+    });
+
   return localSchema;
 };
 
@@ -345,9 +358,11 @@ const buildCollectionType = model => {
     definition: '',
     query: {},
     mutation: {},
+    subscription: {},
     resolvers: {
       Query: {},
       Mutation: {},
+      Subscription: {},
       // define default resolver for this model
       [globalId]: {
         id: parent => parent[model.primaryKey] || parent.id,
@@ -430,6 +445,12 @@ const buildCollectionType = model => {
     mergeSchemas(localSchema, mutationSchema);
   });
 
+  if (model.lifecycles)
+    Object.keys(model.lifecycles).forEach(action => {
+      const subscriptionSchema = buildSubscriptionTypeDef({ model, action }, { _schema });
+      mergeSchemas(localSchema, subscriptionSchema);
+    });
+
   return localSchema;
 };
 
@@ -438,12 +459,13 @@ const buildCollectionType = model => {
 // - Implement nested transactional methods (create/update).
 const buildMutationTypeDef = ({ model, action }, { _schema }) => {
   const capitalizedName = _.upperFirst(toSingular(model.modelName));
-  const mutationName = `${action}${capitalizedName}`;
+  // const mutationName = `${action}${capitalizedName}`;
+  const payloadName = `${action}${capitalizedName}`;
 
   const resolverOpts = {
     resolver: `${model.uid}.${action}`,
     transformOutput: result => ({ [toSingular(model.modelName)]: result }),
-    ..._.get(_schema, `resolver.Mutation.${mutationName}`, {}),
+    ..._.get(_schema, `resolver.Mutation.${payloadName}`, {}),
   };
 
   if (!actionExists(resolverOpts)) {
@@ -453,12 +475,12 @@ const buildMutationTypeDef = ({ model, action }, { _schema }) => {
   const definition = types.generateInputPayloadArguments({
     model,
     name: model.modelName,
-    mutationName,
+    payloadName,
     action,
   });
 
   // ignore if disabled
-  if (!isMutationEnabled(_schema, mutationName)) {
+  if (!isMutationEnabled(_schema, payloadName)) {
     return {
       definition,
     };
@@ -466,19 +488,80 @@ const buildMutationTypeDef = ({ model, action }, { _schema }) => {
 
   const { kind } = model;
 
-  let mutationDef = `${mutationName}(input: ${mutationName}Input)`;
+  let mutationDef = `${payloadName}(input: ${payloadName}Input)`;
   if (kind === 'singleType' && action === 'delete') {
-    mutationDef = mutationName;
+    mutationDef = payloadName;
   }
 
   return {
     definition,
     mutation: {
-      [mutationDef]: `${mutationName}Payload`,
+      [mutationDef]: `${payloadName}Payload`,
     },
     resolvers: {
       Mutation: {
-        [mutationName]: buildMutation(mutationName, resolverOpts),
+        [payloadName]: buildMutation(payloadName, resolverOpts),
+      },
+    },
+  };
+};
+
+// TODO:
+// - Implement batch methods (need to update the content-manager as well).
+// - Implement nested transactional methods (create/update).
+const buildSubscriptionTypeDef = ({ model, action }, { _schema }) => {
+  const capitalizedName = _.upperFirst(toSingular(model.modelName));
+  const payloadName = `${action}${capitalizedName}`;
+
+  const resolverOpts = {
+    resolver: `${model.uid}.${action}`,
+    transformOutput: result => ({ [toSingular(model.modelName)]: result }),
+    ..._.get(_schema, `resolver.Subscription.${payloadName}`, {}),
+  };
+
+  const definition = types.generateInputPayloadArguments({
+    model,
+    name: model.modelName,
+    payloadName,
+    action,
+  });
+
+  // ignore if disabled
+  if (!isSubscriptionEnabled(_schema, payloadName)) {
+    return {
+      definition,
+    };
+  }
+
+  const { kind } = model;
+
+  let subscriptionDef;
+  switch (action) {
+    case 'beforeCreate':
+    case 'afterCreate':
+    case 'beforeFind':
+    case 'afterFind':
+    case 'beforeCount':
+    case 'afterCount':
+    case 'beforeSearch':
+    case 'afterSearch':
+    case 'beforeCountSearch':
+    case 'afterCountSearch':
+      subscriptionDef = `${payloadName}`;
+      break;
+    default:
+      subscriptionDef = `${payloadName}(id: ID!)`;
+      break;
+  }
+
+  return {
+    definition,
+    subscription: {
+      [subscriptionDef]: `${payloadName}Payload`,
+    },
+    resolvers: {
+      Subscription: {
+        [payloadName]: buildSubscription(payloadName, resolverOpts, model),
       },
     },
   };

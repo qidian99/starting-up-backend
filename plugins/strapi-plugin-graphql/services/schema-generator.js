@@ -13,7 +13,8 @@ const Types = require('./type-builder');
 const { buildModels } = require('./type-definitions');
 const { mergeSchemas, createDefaultSchema, diffResolvers } = require('./utils');
 const { toSDL } = require('./schema-definitions');
-const { buildQuery, buildMutation } = require('./resolvers-builder');
+// const { buildQuery, buildMutation } = require('./resolvers-builder');
+const { buildQuery, buildMutation, buildSubscription } = require('./resolvers-builder');
 
 /**
  * Generate GraphQL schema.
@@ -24,13 +25,14 @@ const { buildQuery, buildMutation } = require('./resolvers-builder');
 const generateSchema = () => {
   const shadowCRUDEnabled = strapi.plugins.graphql.config.shadowCRUD !== false;
 
-  // Generate type definition and query/mutation for models.
+  // Generate type definition and query/mutation/subscription for models.
   const shadowCRUD = shadowCRUDEnabled ? buildModelsShadowCRUD() : createDefaultSchema();
 
   const _schema = strapi.plugins.graphql.config._schema.graphql;
 
   // Extract custom definition, query or resolver.
-  const { definition, query, mutation, resolver = {} } = _schema;
+  // const { definition, query, mutation, resolver = {} } = _schema;
+  const { definition, query, mutation, subscription, resolver = {} } = _schema;
 
   // Polymorphic.
   const polymorphicSchema = Types.addPolymorphicUnionType(definition + shadowCRUD.definition);
@@ -50,6 +52,10 @@ const generateSchema = () => {
 
   const mutationFields =
     shadowCRUD.mutation && toSDL(shadowCRUD.mutation, resolver.Mutation, null, 'mutation');
+
+  const subscriptionFields =
+    shadowCRUD.subscription &&
+    toSDL(shadowCRUD.subscription, resolver.Subscription, null, 'subscription');
 
   const scalars = Types.getScalars();
 
@@ -81,6 +87,11 @@ const generateSchema = () => {
       type Mutation {
         ${mutationFields}
         ${mutation}
+      }
+
+      type Subscription {
+        ${subscriptionFields}
+        ${subscription}
       }
 
       ${scalarDef}
@@ -150,11 +161,22 @@ const buildResolvers = resolvers => {
       // Disabled this query.
       if (resolverObj === false) return acc;
 
+      if (type === 'Subscription') {
+        if (!_.isFunction(resolverObj.subscribe)) {
+          throw new Error('Missing subscription resolver');
+        }
+      }
+
       if (_.isFunction(resolverObj)) {
         return _.set(acc, [type, resolverName], resolverObj);
       }
 
       switch (type) {
+        case 'Subscription': {
+          _.set(acc, [type, resolverName], buildSubscription(resolverName, resolverObj));
+
+          break;
+        }
         case 'Mutation': {
           _.set(acc, [type, resolverName], buildMutation(resolverName, resolverObj));
 
