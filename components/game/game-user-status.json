@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_game_game_user_statuses",
+  "info": {
+    "name": "GameUserStatus",
+    "icon": "grimace"
+  },
+  "options": {},
+  "attributes": {
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "revenue": {
+      "type": "integer"
+    },
+    "bankrupt": {
+      "type": "boolean",
+      "default": false
+    },
+    "connected": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_game_company_user_updates",
+  "info": {
+    "name": "CompanyUserUpdate",
+    "icon": "lock"
+  },
+  "options": {},
+  "attributes": {
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "revenue": {
+      "type": "integer",
+      "min": 0
+    },
+    "bankrupt": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

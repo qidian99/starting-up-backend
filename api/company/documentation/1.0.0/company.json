@@ -605,6 +605,70 @@
           "fund": {
             "type": "integer",
             "default": 10
+          },
+          "games": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "numCompanies": {
+                  "type": "integer"
+                },
+                "companies": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "started": {
+                  "type": "boolean"
+                },
+                "width": {
+                  "type": "integer"
+                },
+                "height": {
+                  "type": "integer"
+                },
+                "update": {
+                  "type": "dynamiczone"
+                },
+                "regions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "fundings": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "numCycles": {
+                  "type": "integer"
+                },
+                "cycle": {
+                  "type": "integer"
+                },
+                "status": {
+                  "type": "component"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "updated_by": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       },
@@ -656,6 +720,12 @@
           "fund": {
             "type": "integer",
             "default": 10
+          },
+          "games": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "created_by": {
             "type": "string"

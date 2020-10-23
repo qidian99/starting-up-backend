@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "10/23/2020 4:16:08 PM"
+    "x-generation-date": "10/23/2020 4:41:31 PM"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -4281,6 +4281,70 @@
           "fund": {
             "type": "integer",
             "default": 10
+          },
+          "games": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "numCompanies": {
+                  "type": "integer"
+                },
+                "companies": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "started": {
+                  "type": "boolean"
+                },
+                "width": {
+                  "type": "integer"
+                },
+                "height": {
+                  "type": "integer"
+                },
+                "update": {
+                  "type": "dynamiczone"
+                },
+                "regions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "fundings": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "numCycles": {
+                  "type": "integer"
+                },
+                "cycle": {
+                  "type": "integer"
+                },
+                "status": {
+                  "type": "component"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "updated_by": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       },
@@ -4333,6 +4397,12 @@
             "type": "integer",
             "default": 10
           },
+          "games": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "created_by": {
             "type": "string"
           },
@@ -4361,6 +4431,67 @@
           },
           "threshold": {
             "type": "integer"
+          },
+          "game": {
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "numCompanies": {
+                "type": "integer"
+              },
+              "companies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "started": {
+                "type": "boolean"
+              },
+              "width": {
+                "type": "integer"
+              },
+              "height": {
+                "type": "integer"
+              },
+              "update": {
+                "type": "dynamiczone"
+              },
+              "regions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "fundings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "numCycles": {
+                "type": "integer"
+              },
+              "cycle": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "component"
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
+              }
+            }
           }
         }
       },
@@ -4378,6 +4509,9 @@
           },
           "threshold": {
             "type": "integer"
+          },
+          "game": {
+            "type": "string"
           },
           "created_by": {
             "type": "string"
@@ -4399,9 +4533,47 @@
             "type": "string",
             "default": "Simple Game"
           },
-          "numPlayers": {
+          "numCompanies": {
             "type": "integer",
             "default": 1
+          },
+          "companies": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id",
+                "fund"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "string"
+                },
+                "strategy": {
+                  "type": "component"
+                },
+                "fund": {
+                  "type": "integer"
+                },
+                "games": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "updated_by": {
+                  "type": "string"
+                }
+              }
+            }
           },
           "started": {
             "type": "boolean",
@@ -4424,116 +4596,9 @@
                     "__component": {
                       "type": "string",
                       "enum": [
-                        "game.game-update",
-                        "game.region-update"
-                      ]
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "cycle": {
-                      "type": "integer"
-                    },
-                    "GameUserUpdate": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "id"
-                        ],
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "user": {
-                            "required": [
-                              "id",
-                              "username",
-                              "email"
-                            ],
-                            "properties": {
-                              "id": {
-                                "type": "string"
-                              },
-                              "username": {
-                                "type": "string"
-                              },
-                              "email": {
-                                "type": "string"
-                              },
-                              "provider": {
-                                "type": "string"
-                              },
-                              "password": {
-                                "type": "string"
-                              },
-                              "resetPasswordToken": {
-                                "type": "string"
-                              },
-                              "confirmed": {
-                                "type": "boolean"
-                              },
-                              "blocked": {
-                                "type": "boolean"
-                              },
-                              "role": {
-                                "type": "string"
-                              },
-                              "created_by": {
-                                "type": "string"
-                              },
-                              "updated_by": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "funding": {
-                            "required": [
-                              "id"
-                            ],
-                            "properties": {
-                              "id": {
-                                "type": "string"
-                              },
-                              "name": {
-                                "type": "string"
-                              },
-                              "amount": {
-                                "type": "integer"
-                              },
-                              "cycle": {
-                                "type": "integer"
-                              },
-                              "threshold": {
-                                "type": "integer"
-                              },
-                              "created_by": {
-                                "type": "string"
-                              },
-                              "updated_by": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "bankrupt": {
-                            "type": "boolean",
-                            "default": false
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "id"
-                  ]
-                },
-                {
-                  "properties": {
-                    "__component": {
-                      "type": "string",
-                      "enum": [
-                        "game.game-update",
-                        "game.region-update"
+                        "game.region-update",
+                        "game.company-update",
+                        "game.funding-update"
                       ]
                     },
                     "id": {
@@ -4607,6 +4672,200 @@
                   "required": [
                     "id",
                     "cycle"
+                  ]
+                },
+                {
+                  "properties": {
+                    "__component": {
+                      "type": "string",
+                      "enum": [
+                        "game.region-update",
+                        "game.company-update",
+                        "game.funding-update"
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "cycle": {
+                      "type": "integer",
+                      "default": 0
+                    },
+                    "CompanyUserUpdate": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "user": {
+                            "required": [
+                              "id",
+                              "username",
+                              "email"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "provider": {
+                                "type": "string"
+                              },
+                              "password": {
+                                "type": "string"
+                              },
+                              "resetPasswordToken": {
+                                "type": "string"
+                              },
+                              "confirmed": {
+                                "type": "boolean"
+                              },
+                              "blocked": {
+                                "type": "boolean"
+                              },
+                              "role": {
+                                "type": "string"
+                              },
+                              "created_by": {
+                                "type": "string"
+                              },
+                              "updated_by": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "bankrupt": {
+                            "type": "boolean",
+                            "default": false
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "cycle"
+                  ]
+                },
+                {
+                  "properties": {
+                    "__component": {
+                      "type": "string",
+                      "enum": [
+                        "game.region-update",
+                        "game.company-update",
+                        "game.funding-update"
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "cycle": {
+                      "type": "integer"
+                    },
+                    "FundingUserUpdate": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "user": {
+                            "required": [
+                              "id",
+                              "username",
+                              "email"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "provider": {
+                                "type": "string"
+                              },
+                              "password": {
+                                "type": "string"
+                              },
+                              "resetPasswordToken": {
+                                "type": "string"
+                              },
+                              "confirmed": {
+                                "type": "boolean"
+                              },
+                              "blocked": {
+                                "type": "boolean"
+                              },
+                              "role": {
+                                "type": "string"
+                              },
+                              "created_by": {
+                                "type": "string"
+                              },
+                              "updated_by": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "funding": {
+                            "required": [
+                              "id"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "amount": {
+                                "type": "integer"
+                              },
+                              "cycle": {
+                                "type": "integer"
+                              },
+                              "threshold": {
+                                "type": "integer"
+                              },
+                              "game": {
+                                "type": "string"
+                              },
+                              "created_by": {
+                                "type": "string"
+                              },
+                              "updated_by": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "id"
                   ]
                 }
               ]
@@ -4660,6 +4919,126 @@
                 }
               }
             }
+          },
+          "fundings": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "integer"
+                },
+                "cycle": {
+                  "type": "integer"
+                },
+                "threshold": {
+                  "type": "integer"
+                },
+                "game": {
+                  "type": "string"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "updated_by": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "numCycles": {
+            "type": "integer",
+            "default": 240
+          },
+          "cycle": {
+            "type": "integer",
+            "default": 0
+          },
+          "status": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "GameUserStatus": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "required": [
+                        "id",
+                        "username",
+                        "email"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "provider": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "resetPasswordToken": {
+                          "type": "string"
+                        },
+                        "confirmed": {
+                          "type": "boolean"
+                        },
+                        "blocked": {
+                          "type": "boolean"
+                        },
+                        "role": {
+                          "type": "string"
+                        },
+                        "created_by": {
+                          "type": "string"
+                        },
+                        "updated_by": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "revenue": {
+                      "type": "integer"
+                    },
+                    "bankrupt": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "connected": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -4669,9 +5048,15 @@
             "type": "string",
             "default": "Simple Game"
           },
-          "numPlayers": {
+          "numCompanies": {
             "type": "integer",
             "default": 1
+          },
+          "companies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "started": {
             "type": "boolean",
@@ -4694,116 +5079,9 @@
                     "__component": {
                       "type": "string",
                       "enum": [
-                        "game.game-update",
-                        "game.region-update"
-                      ]
-                    },
-                    "id": {
-                      "type": "string"
-                    },
-                    "cycle": {
-                      "type": "integer"
-                    },
-                    "GameUserUpdate": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "id"
-                        ],
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "user": {
-                            "required": [
-                              "id",
-                              "username",
-                              "email"
-                            ],
-                            "properties": {
-                              "id": {
-                                "type": "string"
-                              },
-                              "username": {
-                                "type": "string"
-                              },
-                              "email": {
-                                "type": "string"
-                              },
-                              "provider": {
-                                "type": "string"
-                              },
-                              "password": {
-                                "type": "string"
-                              },
-                              "resetPasswordToken": {
-                                "type": "string"
-                              },
-                              "confirmed": {
-                                "type": "boolean"
-                              },
-                              "blocked": {
-                                "type": "boolean"
-                              },
-                              "role": {
-                                "type": "string"
-                              },
-                              "created_by": {
-                                "type": "string"
-                              },
-                              "updated_by": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "funding": {
-                            "required": [
-                              "id"
-                            ],
-                            "properties": {
-                              "id": {
-                                "type": "string"
-                              },
-                              "name": {
-                                "type": "string"
-                              },
-                              "amount": {
-                                "type": "integer"
-                              },
-                              "cycle": {
-                                "type": "integer"
-                              },
-                              "threshold": {
-                                "type": "integer"
-                              },
-                              "created_by": {
-                                "type": "string"
-                              },
-                              "updated_by": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "bankrupt": {
-                            "type": "boolean",
-                            "default": false
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "id"
-                  ]
-                },
-                {
-                  "properties": {
-                    "__component": {
-                      "type": "string",
-                      "enum": [
-                        "game.game-update",
-                        "game.region-update"
+                        "game.region-update",
+                        "game.company-update",
+                        "game.funding-update"
                       ]
                     },
                     "id": {
@@ -4878,6 +5156,200 @@
                     "id",
                     "cycle"
                   ]
+                },
+                {
+                  "properties": {
+                    "__component": {
+                      "type": "string",
+                      "enum": [
+                        "game.region-update",
+                        "game.company-update",
+                        "game.funding-update"
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "cycle": {
+                      "type": "integer",
+                      "default": 0
+                    },
+                    "CompanyUserUpdate": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "user": {
+                            "required": [
+                              "id",
+                              "username",
+                              "email"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "provider": {
+                                "type": "string"
+                              },
+                              "password": {
+                                "type": "string"
+                              },
+                              "resetPasswordToken": {
+                                "type": "string"
+                              },
+                              "confirmed": {
+                                "type": "boolean"
+                              },
+                              "blocked": {
+                                "type": "boolean"
+                              },
+                              "role": {
+                                "type": "string"
+                              },
+                              "created_by": {
+                                "type": "string"
+                              },
+                              "updated_by": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "revenue": {
+                            "type": "integer"
+                          },
+                          "bankrupt": {
+                            "type": "boolean",
+                            "default": false
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "cycle"
+                  ]
+                },
+                {
+                  "properties": {
+                    "__component": {
+                      "type": "string",
+                      "enum": [
+                        "game.region-update",
+                        "game.company-update",
+                        "game.funding-update"
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "cycle": {
+                      "type": "integer"
+                    },
+                    "FundingUserUpdate": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "user": {
+                            "required": [
+                              "id",
+                              "username",
+                              "email"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "username": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "provider": {
+                                "type": "string"
+                              },
+                              "password": {
+                                "type": "string"
+                              },
+                              "resetPasswordToken": {
+                                "type": "string"
+                              },
+                              "confirmed": {
+                                "type": "boolean"
+                              },
+                              "blocked": {
+                                "type": "boolean"
+                              },
+                              "role": {
+                                "type": "string"
+                              },
+                              "created_by": {
+                                "type": "string"
+                              },
+                              "updated_by": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "funding": {
+                            "required": [
+                              "id"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "amount": {
+                                "type": "integer"
+                              },
+                              "cycle": {
+                                "type": "integer"
+                              },
+                              "threshold": {
+                                "type": "integer"
+                              },
+                              "game": {
+                                "type": "string"
+                              },
+                              "created_by": {
+                                "type": "string"
+                              },
+                              "updated_by": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
                 }
               ]
             }
@@ -4886,6 +5358,98 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "fundings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "numCycles": {
+            "type": "integer",
+            "default": 240
+          },
+          "cycle": {
+            "type": "integer",
+            "default": 0
+          },
+          "status": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "GameUserStatus": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "required": [
+                        "id",
+                        "username",
+                        "email"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "provider": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "resetPasswordToken": {
+                          "type": "string"
+                        },
+                        "confirmed": {
+                          "type": "boolean"
+                        },
+                        "blocked": {
+                          "type": "boolean"
+                        },
+                        "role": {
+                          "type": "string"
+                        },
+                        "created_by": {
+                          "type": "string"
+                        },
+                        "updated_by": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "revenue": {
+                      "type": "integer"
+                    },
+                    "bankrupt": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "connected": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                }
+              }
             }
           },
           "created_by": {
@@ -5024,8 +5588,14 @@
               "name": {
                 "type": "string"
               },
-              "numPlayers": {
+              "numCompanies": {
                 "type": "integer"
+              },
+              "companies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               },
               "started": {
                 "type": "boolean"
@@ -5044,6 +5614,21 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "fundings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "numCycles": {
+                "type": "integer"
+              },
+              "cycle": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "component"
               },
               "created_by": {
                 "type": "string"

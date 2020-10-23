@@ -534,6 +534,67 @@
           },
           "threshold": {
             "type": "integer"
+          },
+          "game": {
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "numCompanies": {
+                "type": "integer"
+              },
+              "companies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "started": {
+                "type": "boolean"
+              },
+              "width": {
+                "type": "integer"
+              },
+              "height": {
+                "type": "integer"
+              },
+              "update": {
+                "type": "dynamiczone"
+              },
+              "regions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "fundings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "numCycles": {
+                "type": "integer"
+              },
+              "cycle": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "component"
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
+              }
+            }
           }
         }
       },
@@ -551,6 +612,9 @@
           },
           "threshold": {
             "type": "integer"
+          },
+          "game": {
+            "type": "string"
           },
           "created_by": {
             "type": "string"

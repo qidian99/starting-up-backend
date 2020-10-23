@@ -24,6 +24,10 @@
     "threshold": {
       "type": "integer",
       "min": 0
+    },
+    "game": {
+      "via": "fundings",
+      "model": "game"
     }
   }
 }

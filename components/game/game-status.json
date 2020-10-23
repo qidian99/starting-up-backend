@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_game_game_statuses",
+  "info": {
+    "name": "GameStatus",
+    "icon": "exclamation-circle"
+  },
+  "options": {},
+  "attributes": {
+    "GameUserStatus": {
+      "type": "component",
+      "repeatable": true,
+      "component": "game.game-user-status"
+    }
+  }
+}

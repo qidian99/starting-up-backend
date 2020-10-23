@@ -13,9 +13,14 @@
       "type": "string",
       "default": "Simple Game"
     },
-    "numPlayers": {
+    "numCompanies": {
       "type": "integer",
       "default": 1
+    },
+    "companies": {
+      "collection": "company",
+      "via": "games",
+      "dominant": true
     },
     "started": {
       "type": "boolean",
@@ -36,13 +41,33 @@
     "update": {
       "type": "dynamiczone",
       "components": [
-        "game.game-update",
-        "game.region-update"
+        "game.region-update",
+        "game.company-update",
+        "game.funding-update"
       ]
     },
     "regions": {
       "collection": "region",
       "via": "game"
+    },
+    "fundings": {
+      "collection": "funding",
+      "via": "game"
+    },
+    "numCycles": {
+      "type": "integer",
+      "default": 240,
+      "min": 0
+    },
+    "cycle": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "status": {
+      "type": "component",
+      "repeatable": false,
+      "component": "game.game-status"
     }
   }
 }

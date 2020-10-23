@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_game_company_updates",
+  "info": {
+    "name": "CompanyUpdate",
+    "icon": "ethernet"
+  },
+  "options": {},
+  "attributes": {
+    "cycle": {
+      "type": "integer",
+      "min": 0,
+      "required": true,
+      "default": 0
+    },
+    "CompanyUserUpdate": {
+      "type": "component",
+      "repeatable": true,
+      "component": "game.company-user-update"
+    }
+  }
+}

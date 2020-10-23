@@ -642,8 +642,14 @@
               "name": {
                 "type": "string"
               },
-              "numPlayers": {
+              "numCompanies": {
                 "type": "integer"
+              },
+              "companies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               },
               "started": {
                 "type": "boolean"
@@ -662,6 +668,21 @@
                 "items": {
                   "type": "string"
                 }
+              },
+              "fundings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "numCycles": {
+                "type": "integer"
+              },
+              "cycle": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "component"
               },
               "created_by": {
                 "type": "string"
