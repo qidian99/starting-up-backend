@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/companies": {
+    "/regions": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -12,7 +12,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Company"
+                    "$ref": "#/components/schemas/Region"
                   }
                 }
               }
@@ -51,7 +51,7 @@
         },
         "summary": "",
         "tags": [
-          "Company"
+          "Region"
         ],
         "parameters": [
           {
@@ -201,7 +201,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/Region"
                 }
               }
             }
@@ -239,7 +239,7 @@
         },
         "summary": "",
         "tags": [
-          "Company"
+          "Region"
         ],
         "requestBody": {
           "description": "",
@@ -247,14 +247,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewCompany"
+                "$ref": "#/components/schemas/NewRegion"
               }
             }
           }
         }
       }
     },
-    "/companies/count": {
+    "/regions/count": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -306,12 +306,12 @@
         },
         "summary": "",
         "tags": [
-          "Company"
+          "Region"
         ],
         "parameters": []
       }
     },
-    "/companies/{id}": {
+    "/regions/{id}": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -321,7 +321,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/Region"
                 }
               }
             }
@@ -359,7 +359,7 @@
         },
         "summary": "",
         "tags": [
-          "Company"
+          "Region"
         ],
         "parameters": [
           {
@@ -383,7 +383,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Company"
+                  "$ref": "#/components/schemas/Region"
                 }
               }
             }
@@ -421,7 +421,7 @@
         },
         "summary": "",
         "tags": [
-          "Company"
+          "Region"
         ],
         "requestBody": {
           "description": "",
@@ -429,7 +429,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewCompany"
+                "$ref": "#/components/schemas/NewRegion"
               }
             }
           }
@@ -495,7 +495,7 @@
         },
         "summary": "",
         "tags": [
-          "Company"
+          "Region"
         ],
         "parameters": [
           {
@@ -514,51 +514,154 @@
   },
   "components": {
     "schemas": {
-      "Company": {
+      "Region": {
         "required": [
           "id",
-          "fund"
+          "population",
+          "conversionRate",
+          "leavingRate",
+          "revenue",
+          "cost",
+          "growth"
         ],
         "properties": {
           "id": {
             "type": "string"
           },
-          "name": {
-            "type": "string"
+          "population": {
+            "type": "integer",
+            "default": 100
           },
-          "user": {
+          "conversionRate": {
+            "type": "number",
+            "default": 0
+          },
+          "leavingRate": {
+            "type": "number",
+            "default": 0
+          },
+          "revenue": {
+            "type": "integer",
+            "default": 1
+          },
+          "cost": {
+            "type": "number",
+            "default": 10
+          },
+          "growth": {
+            "type": "integer",
+            "default": 2
+          },
+          "update": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "cycle"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "RegionUserUpdate": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "count"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "required": [
+                          "id",
+                          "username",
+                          "email"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "string"
+                          },
+                          "password": {
+                            "type": "string"
+                          },
+                          "resetPasswordToken": {
+                            "type": "string"
+                          },
+                          "confirmed": {
+                            "type": "boolean"
+                          },
+                          "blocked": {
+                            "type": "boolean"
+                          },
+                          "role": {
+                            "type": "string"
+                          },
+                          "created_by": {
+                            "type": "string"
+                          },
+                          "updated_by": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "cycle": {
+                  "type": "integer",
+                  "default": 0
+                }
+              }
+            }
+          },
+          "game": {
             "required": [
-              "id",
-              "username",
-              "email"
+              "id"
             ],
             "properties": {
               "id": {
                 "type": "string"
               },
-              "username": {
+              "name": {
                 "type": "string"
               },
-              "email": {
-                "type": "string"
+              "numPlayers": {
+                "type": "integer"
               },
-              "provider": {
-                "type": "string"
-              },
-              "password": {
-                "type": "string"
-              },
-              "resetPasswordToken": {
-                "type": "string"
-              },
-              "confirmed": {
+              "started": {
                 "type": "boolean"
               },
-              "blocked": {
-                "type": "boolean"
+              "width": {
+                "type": "integer"
               },
-              "role": {
-                "type": "string"
+              "height": {
+                "type": "integer"
+              },
+              "update": {
+                "type": "dynamiczone"
+              },
+              "regions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               },
               "created_by": {
                 "type": "string"
@@ -567,95 +670,124 @@
                 "type": "string"
               }
             }
-          },
-          "strategy": {
-            "type": "object",
-            "required": [
-              "id",
-              "seed",
-              "seriesA",
-              "seriesB"
-            ],
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "preseed": {
-                "type": "number",
-                "default": 0
-              },
-              "seed": {
-                "type": "number",
-                "default": 0
-              },
-              "seriesA": {
-                "type": "number",
-                "default": 0
-              },
-              "seriesB": {
-                "type": "number",
-                "default": 0
-              },
-              "seriesC": {
-                "type": "number",
-                "default": 0
-              }
-            }
-          },
-          "fund": {
-            "type": "integer",
-            "default": 10
           }
         }
       },
-      "NewCompany": {
+      "NewRegion": {
         "required": [
-          "fund"
+          "population",
+          "conversionRate",
+          "leavingRate",
+          "revenue",
+          "cost",
+          "growth"
         ],
         "properties": {
-          "name": {
-            "type": "string"
+          "population": {
+            "type": "integer",
+            "default": 100
           },
-          "user": {
-            "type": "string"
+          "conversionRate": {
+            "type": "number",
+            "default": 0
           },
-          "strategy": {
-            "type": "object",
-            "required": [
-              "id",
-              "seed",
-              "seriesA",
-              "seriesB"
-            ],
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "preseed": {
-                "type": "number",
-                "default": 0
-              },
-              "seed": {
-                "type": "number",
-                "default": 0
-              },
-              "seriesA": {
-                "type": "number",
-                "default": 0
-              },
-              "seriesB": {
-                "type": "number",
-                "default": 0
-              },
-              "seriesC": {
-                "type": "number",
-                "default": 0
+          "leavingRate": {
+            "type": "number",
+            "default": 0
+          },
+          "revenue": {
+            "type": "integer",
+            "default": 1
+          },
+          "cost": {
+            "type": "number",
+            "default": 10
+          },
+          "growth": {
+            "type": "integer",
+            "default": 2
+          },
+          "update": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "cycle"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "RegionUserUpdate": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "count"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "required": [
+                          "id",
+                          "username",
+                          "email"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "string"
+                          },
+                          "password": {
+                            "type": "string"
+                          },
+                          "resetPasswordToken": {
+                            "type": "string"
+                          },
+                          "confirmed": {
+                            "type": "boolean"
+                          },
+                          "blocked": {
+                            "type": "boolean"
+                          },
+                          "role": {
+                            "type": "string"
+                          },
+                          "created_by": {
+                            "type": "string"
+                          },
+                          "updated_by": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "cycle": {
+                  "type": "integer",
+                  "default": 0
+                }
               }
             }
           },
-          "fund": {
-            "type": "integer",
-            "default": 10
+          "game": {
+            "type": "string"
           },
           "created_by": {
             "type": "string"
@@ -669,7 +801,7 @@
   },
   "tags": [
     {
-      "name": "Company"
+      "name": "Region"
     }
   ]
 }

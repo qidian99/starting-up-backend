@@ -14,16 +14,35 @@
       "default": "Simple Game"
     },
     "numPlayers": {
-      "type": "integer"
-    },
-    "users": {
-      "plugin": "users-permissions",
-      "collection": "user",
-      "via": "game"
+      "type": "integer",
+      "default": 1
     },
     "started": {
       "type": "boolean",
       "default": false
+    },
+    "width": {
+      "type": "integer",
+      "default": 9,
+      "max": 100,
+      "min": 1
+    },
+    "height": {
+      "type": "integer",
+      "default": 9,
+      "max": 100,
+      "min": 1
+    },
+    "update": {
+      "type": "dynamiczone",
+      "components": [
+        "game.game-update",
+        "game.region-update"
+      ]
+    },
+    "regions": {
+      "collection": "region",
+      "via": "game"
     }
   }
 }

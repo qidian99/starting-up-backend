@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_game_game_user_updates",
+  "info": {
+    "name": "GameUserUpdate",
+    "icon": "funnel-dollar"
+  },
+  "options": {},
+  "attributes": {
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "funding": {
+      "model": "funding"
+    },
+    "bankrupt": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

@@ -12,12 +12,20 @@
     "name": {
       "type": "string"
     },
-    "strategies": {
-      "type": "json"
-    },
     "user": {
       "plugin": "users-permissions",
       "model": "user"
+    },
+    "strategy": {
+      "type": "component",
+      "repeatable": false,
+      "component": "company.strategy"
+    },
+    "fund": {
+      "type": "integer",
+      "default": 10,
+      "min": 0,
+      "required": true
     }
   }
 }

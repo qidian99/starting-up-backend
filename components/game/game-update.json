@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_game_game_updates",
+  "info": {
+    "name": "GameUpdate",
+    "icon": "long-arrow-alt-up"
+  },
+  "options": {},
+  "attributes": {
+    "cycle": {
+      "type": "integer",
+      "min": 0
+    },
+    "GameUserUpdate": {
+      "type": "component",
+      "repeatable": true,
+      "component": "game.game-user-update"
+    }
+  }
+}

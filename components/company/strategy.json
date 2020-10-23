@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_company_strategies",
+  "info": {
+    "name": "Strategy",
+    "icon": "calculator"
+  },
+  "options": {},
+  "attributes": {
+    "preseed": {
+      "type": "decimal",
+      "max": 1,
+      "min": 0,
+      "default": 0
+    },
+    "seed": {
+      "type": "decimal",
+      "min": 0,
+      "max": 1,
+      "required": true,
+      "default": 0
+    },
+    "seriesA": {
+      "type": "decimal",
+      "min": 0,
+      "max": 1,
+      "required": true,
+      "default": 0
+    },
+    "seriesB": {
+      "type": "decimal",
+      "max": 1,
+      "min": 0,
+      "default": 0,
+      "required": true
+    },
+    "seriesC": {
+      "type": "decimal",
+      "max": 1,
+      "min": 0,
+      "default": 0
+    }
+  }
+}

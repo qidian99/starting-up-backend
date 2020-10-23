@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "fundings",
+  "info": {
+    "name": "Funding"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "cycle": {
+      "type": "biginteger",
+      "min": "0"
+    },
+    "threshold": {
+      "type": "integer",
+      "min": 0
+    }
+  }
+}

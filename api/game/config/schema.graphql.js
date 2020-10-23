@@ -5,6 +5,7 @@ module.exports = {
   query: `
   `,
   mutation: `
+  createSimpleGame: Game
   `,
   subscription: `
     onCustomSubscription(channel: String): String
@@ -13,6 +14,10 @@ module.exports = {
     Query: {
     },
     Mutation: {
+      createSimpleGame: {
+        policies: [],
+        resolver: 'application::game.game.createSimpleGame',
+      }
     },
     Subscription: {
       onCustomSubscription: {

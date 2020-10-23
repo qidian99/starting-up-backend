@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_game_region_updates",
+  "info": {
+    "name": "RegionUpdate",
+    "icon": "cube"
+  },
+  "options": {},
+  "attributes": {
+    "RegionUserUpdate": {
+      "type": "component",
+      "repeatable": true,
+      "component": "game.region-user-update"
+    },
+    "cycle": {
+      "type": "integer",
+      "default": 0,
+      "required": true,
+      "min": 0
+    }
+  }
+}

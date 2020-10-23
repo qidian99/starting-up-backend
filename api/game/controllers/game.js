@@ -9,5 +9,9 @@ module.exports = {
   async gameEntered(ctx) {
     console.log(gameEntered);
     console.log(ctx);
+  },
+  async createSimpleGame(ctx) {
+    const game = await strapi.query('game').create();
+    return game;
   }
 };
