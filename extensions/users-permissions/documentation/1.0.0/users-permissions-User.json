@@ -1271,6 +1271,9 @@
                   "type": "string"
                 }
               },
+              "started": {
+                "type": "boolean"
+              },
               "created_by": {
                 "type": "string"
               },

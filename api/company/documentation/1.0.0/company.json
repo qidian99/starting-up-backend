@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/games": {
+    "/companies": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -12,7 +12,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Game"
+                    "$ref": "#/components/schemas/Company"
                   }
                 }
               }
@@ -51,7 +51,7 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Company"
         ],
         "parameters": [
           {
@@ -201,7 +201,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Game"
+                  "$ref": "#/components/schemas/Company"
                 }
               }
             }
@@ -239,7 +239,7 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Company"
         ],
         "requestBody": {
           "description": "",
@@ -247,14 +247,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewGame"
+                "$ref": "#/components/schemas/NewCompany"
               }
             }
           }
         }
       }
     },
-    "/games/count": {
+    "/companies/count": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -306,12 +306,12 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Company"
         ],
         "parameters": []
       }
     },
-    "/games/{id}": {
+    "/companies/{id}": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -321,7 +321,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Game"
+                  "$ref": "#/components/schemas/Company"
                 }
               }
             }
@@ -359,7 +359,7 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Company"
         ],
         "parameters": [
           {
@@ -383,7 +383,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Game"
+                  "$ref": "#/components/schemas/Company"
                 }
               }
             }
@@ -421,7 +421,7 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Company"
         ],
         "requestBody": {
           "description": "",
@@ -429,7 +429,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewGame"
+                "$ref": "#/components/schemas/NewCompany"
               }
             }
           }
@@ -495,7 +495,7 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Company"
         ],
         "parameters": [
           {
@@ -514,7 +514,7 @@
   },
   "components": {
     "schemas": {
-      "Game": {
+      "Company": {
         "required": [
           "id"
         ],
@@ -523,84 +523,68 @@
             "type": "string"
           },
           "name": {
-            "type": "string",
-            "default": "Simple Game"
+            "type": "string"
           },
-          "numPlayers": {
-            "type": "integer"
+          "strategies": {
+            "type": "object"
           },
-          "users": {
-            "type": "array",
-            "items": {
-              "required": [
-                "id",
-                "username",
-                "email"
-              ],
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "username": {
-                  "type": "string"
-                },
-                "email": {
-                  "type": "string"
-                },
-                "provider": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "resetPasswordToken": {
-                  "type": "string"
-                },
-                "confirmed": {
-                  "type": "boolean"
-                },
-                "blocked": {
-                  "type": "boolean"
-                },
-                "role": {
-                  "type": "string"
-                },
-                "game": {
-                  "type": "string"
-                },
-                "created_by": {
-                  "type": "string"
-                },
-                "updated_by": {
-                  "type": "string"
-                }
+          "user": {
+            "required": [
+              "id",
+              "username",
+              "email"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "resetPasswordToken": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "blocked": {
+                "type": "boolean"
+              },
+              "role": {
+                "type": "string"
+              },
+              "game": {
+                "type": "string"
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
               }
             }
-          },
-          "started": {
-            "type": "boolean",
-            "default": false
           }
         }
       },
-      "NewGame": {
+      "NewCompany": {
         "properties": {
           "name": {
-            "type": "string",
-            "default": "Simple Game"
+            "type": "string"
           },
-          "numPlayers": {
-            "type": "integer"
+          "strategies": {
+            "type": "object"
           },
-          "users": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "started": {
-            "type": "boolean",
-            "default": false
+          "user": {
+            "type": "string"
           },
           "created_by": {
             "type": "string"
@@ -614,7 +598,7 @@
   },
   "tags": [
     {
-      "name": "Game"
+      "name": "Company"
     }
   ]
 }

@@ -10,7 +10,8 @@
   },
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "default": "Simple Game"
     },
     "numPlayers": {
       "type": "integer"
@@ -19,6 +20,10 @@
       "plugin": "users-permissions",
       "collection": "user",
       "via": "game"
+    },
+    "started": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
