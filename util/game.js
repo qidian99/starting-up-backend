@@ -5,6 +5,7 @@ const {
   simpleGameWidth,
   simpleGameHeight,
   simpleGameNumCycles,
+  simpleGameRegion,
 } = require('starting-up-common')
 
 // console.log(
