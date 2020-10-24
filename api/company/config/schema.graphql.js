@@ -1,11 +1,18 @@
 module.exports = {
 
   definition: `
+  input SimpleStrategyInput {
+    preseed: Float!
+    seed: Float!
+    seriesA: Float!
+    seriesB: Float!
+    seriesC: Float!
+  }
   `,
   query: `
   `,
   mutation: `
-  registerCompany(name: String! strategies: JSON!): Company
+  registerCompany(name: String! strategy: SimpleStrategyInput!): Company
   `,
   subscription: `
   `,

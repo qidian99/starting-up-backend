@@ -21,7 +21,8 @@
     "strapi-plugin-graphql": "file:./plugins/strapi-plugin-graphql",
     "strapi-plugin-upload": "3.1.7",
     "strapi-plugin-users-permissions": "3.1.7",
-    "strapi-utils": "3.1.7"
+    "strapi-utils": "3.1.7",
+    "starting-up-common": "^0.0.5"
   },
   "author": {
     "name": "A Strapi developer"

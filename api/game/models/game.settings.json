@@ -28,13 +28,13 @@
     },
     "width": {
       "type": "integer",
-      "default": 9,
+      "default": 3,
       "max": 100,
       "min": 1
     },
     "height": {
       "type": "integer",
-      "default": 9,
+      "default": 3,
       "max": 100,
       "min": 1
     },
@@ -66,7 +66,7 @@
     },
     "status": {
       "type": "component",
-      "repeatable": false,
+      "repeatable": true,
       "component": "game.game-status"
     }
   }

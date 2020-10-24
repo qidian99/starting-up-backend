@@ -574,11 +574,11 @@
           },
           "width": {
             "type": "integer",
-            "default": 9
+            "default": 3
           },
           "height": {
             "type": "integer",
-            "default": 9
+            "default": 3
           },
           "update": {
             "type": "array",
@@ -893,7 +893,7 @@
                   "type": "integer"
                 },
                 "cost": {
-                  "type": "number"
+                  "type": "integer"
                 },
                 "growth": {
                   "type": "integer"
@@ -956,77 +956,83 @@
             "default": 0
           },
           "status": {
-            "type": "object",
-            "required": [
-              "id"
-            ],
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "GameUserStatus": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "id"
-                  ],
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "user": {
-                      "required": [
-                        "id",
-                        "username",
-                        "email"
-                      ],
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "username": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "provider": {
-                          "type": "string"
-                        },
-                        "password": {
-                          "type": "string"
-                        },
-                        "resetPasswordToken": {
-                          "type": "string"
-                        },
-                        "confirmed": {
-                          "type": "boolean"
-                        },
-                        "blocked": {
-                          "type": "boolean"
-                        },
-                        "role": {
-                          "type": "string"
-                        },
-                        "created_by": {
-                          "type": "string"
-                        },
-                        "updated_by": {
-                          "type": "string"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "GameUserStatus": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "required": [
+                          "id",
+                          "username",
+                          "email"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "string"
+                          },
+                          "password": {
+                            "type": "string"
+                          },
+                          "resetPasswordToken": {
+                            "type": "string"
+                          },
+                          "confirmed": {
+                            "type": "boolean"
+                          },
+                          "blocked": {
+                            "type": "boolean"
+                          },
+                          "role": {
+                            "type": "string"
+                          },
+                          "created_by": {
+                            "type": "string"
+                          },
+                          "updated_by": {
+                            "type": "string"
+                          }
                         }
+                      },
+                      "revenue": {
+                        "type": "integer"
+                      },
+                      "bankrupt": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "connected": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "index": {
+                        "type": "integer"
                       }
-                    },
-                    "revenue": {
-                      "type": "integer"
-                    },
-                    "bankrupt": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "connected": {
-                      "type": "boolean",
-                      "default": false
                     }
                   }
                 }
@@ -1057,11 +1063,11 @@
           },
           "width": {
             "type": "integer",
-            "default": 9
+            "default": 3
           },
           "height": {
             "type": "integer",
-            "default": 9
+            "default": 3
           },
           "update": {
             "type": "array",
@@ -1368,77 +1374,83 @@
             "default": 0
           },
           "status": {
-            "type": "object",
-            "required": [
-              "id"
-            ],
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "GameUserStatus": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "id"
-                  ],
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "user": {
-                      "required": [
-                        "id",
-                        "username",
-                        "email"
-                      ],
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "username": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "provider": {
-                          "type": "string"
-                        },
-                        "password": {
-                          "type": "string"
-                        },
-                        "resetPasswordToken": {
-                          "type": "string"
-                        },
-                        "confirmed": {
-                          "type": "boolean"
-                        },
-                        "blocked": {
-                          "type": "boolean"
-                        },
-                        "role": {
-                          "type": "string"
-                        },
-                        "created_by": {
-                          "type": "string"
-                        },
-                        "updated_by": {
-                          "type": "string"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "GameUserStatus": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "required": [
+                          "id",
+                          "username",
+                          "email"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "string"
+                          },
+                          "password": {
+                            "type": "string"
+                          },
+                          "resetPasswordToken": {
+                            "type": "string"
+                          },
+                          "confirmed": {
+                            "type": "boolean"
+                          },
+                          "blocked": {
+                            "type": "boolean"
+                          },
+                          "role": {
+                            "type": "string"
+                          },
+                          "created_by": {
+                            "type": "string"
+                          },
+                          "updated_by": {
+                            "type": "string"
+                          }
                         }
+                      },
+                      "revenue": {
+                        "type": "integer"
+                      },
+                      "bankrupt": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "connected": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "index": {
+                        "type": "integer"
                       }
-                    },
-                    "revenue": {
-                      "type": "integer"
-                    },
-                    "bankrupt": {
-                      "type": "boolean",
-                      "default": false
-                    },
-                    "connected": {
-                      "type": "boolean",
-                      "default": false
                     }
                   }
                 }

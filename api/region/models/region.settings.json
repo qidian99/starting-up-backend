@@ -36,7 +36,7 @@
       "required": true
     },
     "cost": {
-      "type": "decimal",
+      "type": "integer",
       "default": 10,
       "required": true,
       "min": 0

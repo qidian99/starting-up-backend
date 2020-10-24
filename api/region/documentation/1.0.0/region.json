@@ -545,7 +545,7 @@
             "default": 1
           },
           "cost": {
-            "type": "number",
+            "type": "integer",
             "default": 10
           },
           "growth": {
@@ -721,7 +721,7 @@
             "default": 1
           },
           "cost": {
-            "type": "number",
+            "type": "integer",
             "default": 10
           },
           "growth": {

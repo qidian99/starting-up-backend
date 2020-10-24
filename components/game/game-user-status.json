@@ -20,6 +20,9 @@
     "connected": {
       "type": "boolean",
       "default": false
+    },
+    "index": {
+      "type": "integer"
     }
   }
 }
