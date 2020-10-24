@@ -9,6 +9,7 @@ module.exports = {
   `,
   subscription: `
     onCustomSubscription(channel: String): String
+    joinGame(game: ID): String
   `,
   resolver: {
     Query: {
@@ -36,6 +37,21 @@ module.exports = {
           }, 1000);
 
           return await strapi.graphql.pubsub.asyncIterator(options.channel)
+        }
+      },
+      joinGame: {
+        resolverOf: 'plugins::users-permissions.user.me',
+        subscribe: async (obj, options, { context }) => {
+          const { game } = options;
+          console.log(game);
+          // setInterval(() => {
+          //   strapi.graphql.pubsub.publish(options.channel, {
+          //     onCustomSubscription: `Count: ${count}`
+          //   });
+
+          //   count++;
+          // }, 1000);
+          return "Success";
         }
       }
     }
