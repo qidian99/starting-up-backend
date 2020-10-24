@@ -188,11 +188,13 @@ module.exports = strapi => {
               return Promise.resolve(ctx);
             }
 
+            // const populate = strapi.plugins['users-permissions'].models.user.associations
             const populate = strapi.plugins['users-permissions'].models.user.associations
               .filter(ast => ast.autoPopulate !== false)
               .map(ast => ast.alias);
-
-            let user = await strapi.plugins['users-permissions'].services.user.findOne(
+ 
+            // let user = await strapi.plugins['users-permissions'].services.user.findOne(
+            let user = await strapi.query('user', 'users-permissions').findOne(
               { id },
               populate
             );
