@@ -55,6 +55,7 @@ module.exports = {
           console.log({
             // company,
             // userId,
+            user: ctx.state.user,
             game,
             companies: game.companies,
           })
@@ -66,15 +67,19 @@ module.exports = {
             id: companyId
           }, [])
 
-          console.log({
-            company,
-            userId,
-          })
+          // console.log({
+          //   company,
+          //   userId,
+          // })
 
           if (!company) {
             throw new Error("Company does not exist");
           }
 
+          console.log({
+            companyUser: company.user,
+            userId,
+          })
           if (company.user != userId) { // shadow equal for objectId and string
             throw new Error("Company does not belong to current user");
           }

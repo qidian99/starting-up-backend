@@ -36,7 +36,7 @@ module.exports = () => {
       }
 
       if (cycle === numCycles) {
-        delete games[gameId];
+        delete strapi.games[gameId];
         return;
       }
 
@@ -180,28 +180,6 @@ module.exports = () => {
           // TODO: memoize users for each region
           const regionId = id.toString();
 
-          const regionCompanyUpdates = Object.keys(revenues).map(cid => {
-            if (!(cid in revenues)) {
-              revenues[cid] = companyMap[cid].fund;
-            }
-            // console.log({
-            //   c: companyMap[cid],
-            //   revenue: revenues[cid],
-            // })
-            return ({
-              company: cid,
-              bankrupt: revenues[cid] < 0,
-              revenue: revenues[cid]
-            })
-          });
-
-          // Update company status
-          const newCompanyUpdate = {
-            __typename: "ComponentGameCompanyUpdate",
-            cycle: newCycle,
-            RegionCompanyUpdate: regionCompanyUpdates,
-          };
-          updates.push(newCompanyUpdate);
           // console.log({
           //   RegionCompanyUpdate: regionCompanyUpdates,
           // });
@@ -249,6 +227,28 @@ module.exports = () => {
 
         // console.log(`Summary for regions`, regionUsers);
 
+        const companyUserUpdates = Object.keys(revenues).map(cid => {
+          if (!(cid in revenues)) {
+            revenues[cid] = companyMap[cid].fund;
+          }
+          // console.log({
+          //   c: companyMap[cid],
+          //   revenue: revenues[cid],
+          // })
+          return ({
+            company: cid,
+            bankrupt: revenues[cid] < 0,
+            revenue: revenues[cid]
+          })
+        });
+
+        // Update company status
+        const newCompanyUpdate = {
+          __typename: "ComponentGameCompanyUpdate",
+          cycle: newCycle,
+          CompanyUserUpdate: companyUserUpdates,
+        };
+        updates.push(newCompanyUpdate);
 
         strapi.graphql.pubsub.publish(gameId, {
           joinGame: updates,
