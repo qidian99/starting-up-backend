@@ -6,9 +6,8 @@
   },
   "options": {},
   "attributes": {
-    "user": {
-      "plugin": "users-permissions",
-      "model": "user"
+    "company": {
+      "model": "company"
     },
     "funding": {
       "model": "funding"

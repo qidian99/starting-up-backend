@@ -33,7 +33,9 @@ const createFundingsForSimpleGame = async () => {
  * @param {Number} height number of columns in the Terrian
  */
 const createRegionsForSimpleGame = async (width = simpleGameWidth, height = simpleGameHeight) => {
-  return await Promise.all(Array(width * height).fill(simpleGameRegion).map(strapi.services.region.create));
+  return await Promise.all(Array(width * height).fill(simpleGameRegion).map((_, index) => strapi.query('region').create({
+    index,
+  })));
 }
 
 module.exports = {

@@ -55,6 +55,11 @@
     "game": {
       "via": "regions",
       "model": "game"
+    },
+    "index": {
+      "type": "integer",
+      "min": 0,
+      "required": true
     }
   }
 }

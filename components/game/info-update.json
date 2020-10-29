@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_game_info_updates",
+  "info": {
+    "name": "InfoUpdate",
+    "icon": "bullhorn"
+  },
+  "options": {},
+  "attributes": {
+    "message": {
+      "type": "string"
+    },
+    "cycle": {
+      "type": "integer"
+    }
+  }
+}

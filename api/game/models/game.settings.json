@@ -43,7 +43,8 @@
       "components": [
         "game.region-update",
         "game.company-update",
-        "game.funding-update"
+        "game.funding-update",
+        "game.info-update"
       ]
     },
     "regions": {

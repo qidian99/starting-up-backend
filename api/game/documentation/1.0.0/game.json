@@ -591,7 +591,8 @@
                       "enum": [
                         "game.region-update",
                         "game.company-update",
-                        "game.funding-update"
+                        "game.funding-update",
+                        "game.info-update"
                       ]
                     },
                     "id": {
@@ -609,39 +610,32 @@
                           "id": {
                             "type": "string"
                           },
-                          "user": {
+                          "company": {
                             "required": [
                               "id",
-                              "username",
-                              "email"
+                              "fund"
                             ],
                             "properties": {
                               "id": {
                                 "type": "string"
                               },
-                              "username": {
+                              "name": {
                                 "type": "string"
                               },
-                              "email": {
+                              "user": {
                                 "type": "string"
                               },
-                              "provider": {
-                                "type": "string"
+                              "strategy": {
+                                "type": "component"
                               },
-                              "password": {
-                                "type": "string"
+                              "fund": {
+                                "type": "integer"
                               },
-                              "resetPasswordToken": {
-                                "type": "string"
-                              },
-                              "confirmed": {
-                                "type": "boolean"
-                              },
-                              "blocked": {
-                                "type": "boolean"
-                              },
-                              "role": {
-                                "type": "string"
+                              "games": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               },
                               "created_by": {
                                 "type": "string"
@@ -674,7 +668,8 @@
                       "enum": [
                         "game.region-update",
                         "game.company-update",
-                        "game.funding-update"
+                        "game.funding-update",
+                        "game.info-update"
                       ]
                     },
                     "id": {
@@ -695,39 +690,32 @@
                           "id": {
                             "type": "string"
                           },
-                          "user": {
+                          "company": {
                             "required": [
                               "id",
-                              "username",
-                              "email"
+                              "fund"
                             ],
                             "properties": {
                               "id": {
                                 "type": "string"
                               },
-                              "username": {
+                              "name": {
                                 "type": "string"
                               },
-                              "email": {
+                              "user": {
                                 "type": "string"
                               },
-                              "provider": {
-                                "type": "string"
+                              "strategy": {
+                                "type": "component"
                               },
-                              "password": {
-                                "type": "string"
+                              "fund": {
+                                "type": "integer"
                               },
-                              "resetPasswordToken": {
-                                "type": "string"
-                              },
-                              "confirmed": {
-                                "type": "boolean"
-                              },
-                              "blocked": {
-                                "type": "boolean"
-                              },
-                              "role": {
-                                "type": "string"
+                              "games": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               },
                               "created_by": {
                                 "type": "string"
@@ -760,7 +748,8 @@
                       "enum": [
                         "game.region-update",
                         "game.company-update",
-                        "game.funding-update"
+                        "game.funding-update",
+                        "game.info-update"
                       ]
                     },
                     "id": {
@@ -780,39 +769,32 @@
                           "id": {
                             "type": "string"
                           },
-                          "user": {
+                          "company": {
                             "required": [
                               "id",
-                              "username",
-                              "email"
+                              "fund"
                             ],
                             "properties": {
                               "id": {
                                 "type": "string"
                               },
-                              "username": {
+                              "name": {
                                 "type": "string"
                               },
-                              "email": {
+                              "user": {
                                 "type": "string"
                               },
-                              "provider": {
-                                "type": "string"
+                              "strategy": {
+                                "type": "component"
                               },
-                              "password": {
-                                "type": "string"
+                              "fund": {
+                                "type": "integer"
                               },
-                              "resetPasswordToken": {
-                                "type": "string"
-                              },
-                              "confirmed": {
-                                "type": "boolean"
-                              },
-                              "blocked": {
-                                "type": "boolean"
-                              },
-                              "role": {
-                                "type": "string"
+                              "games": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               },
                               "created_by": {
                                 "type": "string"
@@ -860,6 +842,31 @@
                   "required": [
                     "id"
                   ]
+                },
+                {
+                  "properties": {
+                    "__component": {
+                      "type": "string",
+                      "enum": [
+                        "game.region-update",
+                        "game.company-update",
+                        "game.funding-update",
+                        "game.info-update"
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "cycle": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
                 }
               ]
             }
@@ -874,7 +881,8 @@
                 "leavingRate",
                 "revenue",
                 "cost",
-                "growth"
+                "growth",
+                "index"
               ],
               "properties": {
                 "id": {
@@ -903,6 +911,9 @@
                 },
                 "game": {
                   "type": "string"
+                },
+                "index": {
+                  "type": "integer"
                 },
                 "created_by": {
                   "type": "string"
@@ -1080,7 +1091,8 @@
                       "enum": [
                         "game.region-update",
                         "game.company-update",
-                        "game.funding-update"
+                        "game.funding-update",
+                        "game.info-update"
                       ]
                     },
                     "id": {
@@ -1098,39 +1110,32 @@
                           "id": {
                             "type": "string"
                           },
-                          "user": {
+                          "company": {
                             "required": [
                               "id",
-                              "username",
-                              "email"
+                              "fund"
                             ],
                             "properties": {
                               "id": {
                                 "type": "string"
                               },
-                              "username": {
+                              "name": {
                                 "type": "string"
                               },
-                              "email": {
+                              "user": {
                                 "type": "string"
                               },
-                              "provider": {
-                                "type": "string"
+                              "strategy": {
+                                "type": "component"
                               },
-                              "password": {
-                                "type": "string"
+                              "fund": {
+                                "type": "integer"
                               },
-                              "resetPasswordToken": {
-                                "type": "string"
-                              },
-                              "confirmed": {
-                                "type": "boolean"
-                              },
-                              "blocked": {
-                                "type": "boolean"
-                              },
-                              "role": {
-                                "type": "string"
+                              "games": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               },
                               "created_by": {
                                 "type": "string"
@@ -1163,7 +1168,8 @@
                       "enum": [
                         "game.region-update",
                         "game.company-update",
-                        "game.funding-update"
+                        "game.funding-update",
+                        "game.info-update"
                       ]
                     },
                     "id": {
@@ -1184,39 +1190,32 @@
                           "id": {
                             "type": "string"
                           },
-                          "user": {
+                          "company": {
                             "required": [
                               "id",
-                              "username",
-                              "email"
+                              "fund"
                             ],
                             "properties": {
                               "id": {
                                 "type": "string"
                               },
-                              "username": {
+                              "name": {
                                 "type": "string"
                               },
-                              "email": {
+                              "user": {
                                 "type": "string"
                               },
-                              "provider": {
-                                "type": "string"
+                              "strategy": {
+                                "type": "component"
                               },
-                              "password": {
-                                "type": "string"
+                              "fund": {
+                                "type": "integer"
                               },
-                              "resetPasswordToken": {
-                                "type": "string"
-                              },
-                              "confirmed": {
-                                "type": "boolean"
-                              },
-                              "blocked": {
-                                "type": "boolean"
-                              },
-                              "role": {
-                                "type": "string"
+                              "games": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               },
                               "created_by": {
                                 "type": "string"
@@ -1249,7 +1248,8 @@
                       "enum": [
                         "game.region-update",
                         "game.company-update",
-                        "game.funding-update"
+                        "game.funding-update",
+                        "game.info-update"
                       ]
                     },
                     "id": {
@@ -1269,39 +1269,32 @@
                           "id": {
                             "type": "string"
                           },
-                          "user": {
+                          "company": {
                             "required": [
                               "id",
-                              "username",
-                              "email"
+                              "fund"
                             ],
                             "properties": {
                               "id": {
                                 "type": "string"
                               },
-                              "username": {
+                              "name": {
                                 "type": "string"
                               },
-                              "email": {
+                              "user": {
                                 "type": "string"
                               },
-                              "provider": {
-                                "type": "string"
+                              "strategy": {
+                                "type": "component"
                               },
-                              "password": {
-                                "type": "string"
+                              "fund": {
+                                "type": "integer"
                               },
-                              "resetPasswordToken": {
-                                "type": "string"
-                              },
-                              "confirmed": {
-                                "type": "boolean"
-                              },
-                              "blocked": {
-                                "type": "boolean"
-                              },
-                              "role": {
-                                "type": "string"
+                              "games": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               },
                               "created_by": {
                                 "type": "string"
@@ -1344,6 +1337,31 @@
                           }
                         }
                       }
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
+                },
+                {
+                  "properties": {
+                    "__component": {
+                      "type": "string",
+                      "enum": [
+                        "game.region-update",
+                        "game.company-update",
+                        "game.funding-update",
+                        "game.info-update"
+                      ]
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "cycle": {
+                      "type": "integer"
                     }
                   },
                   "required": [
