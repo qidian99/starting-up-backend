@@ -8,7 +8,9 @@
   "attributes": {
     "cycle": {
       "type": "integer",
-      "min": 0
+      "min": 0,
+      "required": true,
+      "default": 0
     },
     "FundingUserUpdate": {
       "type": "component",

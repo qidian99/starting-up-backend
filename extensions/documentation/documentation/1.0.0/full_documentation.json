@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "10/28/2020 7:10:03 PM"
+    "x-generation-date": "10/28/2020 11:16:16 PM"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -4661,6 +4661,56 @@
                     "cycle": {
                       "type": "integer",
                       "default": 0
+                    },
+                    "region": {
+                      "required": [
+                        "id",
+                        "population",
+                        "conversionRate",
+                        "leavingRate",
+                        "revenue",
+                        "cost",
+                        "growth",
+                        "index"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "population": {
+                          "type": "integer"
+                        },
+                        "conversionRate": {
+                          "type": "number"
+                        },
+                        "leavingRate": {
+                          "type": "number"
+                        },
+                        "revenue": {
+                          "type": "integer"
+                        },
+                        "cost": {
+                          "type": "integer"
+                        },
+                        "growth": {
+                          "type": "integer"
+                        },
+                        "update": {
+                          "type": "component"
+                        },
+                        "game": {
+                          "type": "string"
+                        },
+                        "index": {
+                          "type": "integer"
+                        },
+                        "created_by": {
+                          "type": "string"
+                        },
+                        "updated_by": {
+                          "type": "string"
+                        }
+                      }
                     }
                   },
                   "required": [
@@ -4763,7 +4813,8 @@
                       "type": "string"
                     },
                     "cycle": {
-                      "type": "integer"
+                      "type": "integer",
+                      "default": 0
                     },
                     "FundingUserUpdate": {
                       "type": "array",
@@ -4847,7 +4898,8 @@
                     }
                   },
                   "required": [
-                    "id"
+                    "id",
+                    "cycle"
                   ]
                 },
                 {
@@ -4868,11 +4920,13 @@
                       "type": "string"
                     },
                     "cycle": {
-                      "type": "integer"
+                      "type": "integer",
+                      "default": 0
                     }
                   },
                   "required": [
-                    "id"
+                    "id",
+                    "cycle"
                   ]
                 }
               ]
@@ -4995,39 +5049,32 @@
                       "id": {
                         "type": "string"
                       },
-                      "user": {
+                      "company": {
                         "required": [
                           "id",
-                          "username",
-                          "email"
+                          "fund"
                         ],
                         "properties": {
                           "id": {
                             "type": "string"
                           },
-                          "username": {
+                          "name": {
                             "type": "string"
                           },
-                          "email": {
+                          "user": {
                             "type": "string"
                           },
-                          "provider": {
-                            "type": "string"
+                          "strategy": {
+                            "type": "component"
                           },
-                          "password": {
-                            "type": "string"
+                          "fund": {
+                            "type": "integer"
                           },
-                          "resetPasswordToken": {
-                            "type": "string"
-                          },
-                          "confirmed": {
-                            "type": "boolean"
-                          },
-                          "blocked": {
-                            "type": "boolean"
-                          },
-                          "role": {
-                            "type": "string"
+                          "games": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           },
                           "created_by": {
                             "type": "string"
@@ -5161,6 +5208,56 @@
                     "cycle": {
                       "type": "integer",
                       "default": 0
+                    },
+                    "region": {
+                      "required": [
+                        "id",
+                        "population",
+                        "conversionRate",
+                        "leavingRate",
+                        "revenue",
+                        "cost",
+                        "growth",
+                        "index"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "population": {
+                          "type": "integer"
+                        },
+                        "conversionRate": {
+                          "type": "number"
+                        },
+                        "leavingRate": {
+                          "type": "number"
+                        },
+                        "revenue": {
+                          "type": "integer"
+                        },
+                        "cost": {
+                          "type": "integer"
+                        },
+                        "growth": {
+                          "type": "integer"
+                        },
+                        "update": {
+                          "type": "component"
+                        },
+                        "game": {
+                          "type": "string"
+                        },
+                        "index": {
+                          "type": "integer"
+                        },
+                        "created_by": {
+                          "type": "string"
+                        },
+                        "updated_by": {
+                          "type": "string"
+                        }
+                      }
                     }
                   },
                   "required": [
@@ -5263,7 +5360,8 @@
                       "type": "string"
                     },
                     "cycle": {
-                      "type": "integer"
+                      "type": "integer",
+                      "default": 0
                     },
                     "FundingUserUpdate": {
                       "type": "array",
@@ -5347,7 +5445,8 @@
                     }
                   },
                   "required": [
-                    "id"
+                    "id",
+                    "cycle"
                   ]
                 },
                 {
@@ -5368,11 +5467,13 @@
                       "type": "string"
                     },
                     "cycle": {
-                      "type": "integer"
+                      "type": "integer",
+                      "default": 0
                     }
                   },
                   "required": [
-                    "id"
+                    "id",
+                    "cycle"
                   ]
                 }
               ]
@@ -5420,39 +5521,32 @@
                       "id": {
                         "type": "string"
                       },
-                      "user": {
+                      "company": {
                         "required": [
                           "id",
-                          "username",
-                          "email"
+                          "fund"
                         ],
                         "properties": {
                           "id": {
                             "type": "string"
                           },
-                          "username": {
+                          "name": {
                             "type": "string"
                           },
-                          "email": {
+                          "user": {
                             "type": "string"
                           },
-                          "provider": {
-                            "type": "string"
+                          "strategy": {
+                            "type": "component"
                           },
-                          "password": {
-                            "type": "string"
+                          "fund": {
+                            "type": "integer"
                           },
-                          "resetPasswordToken": {
-                            "type": "string"
-                          },
-                          "confirmed": {
-                            "type": "boolean"
-                          },
-                          "blocked": {
-                            "type": "boolean"
-                          },
-                          "role": {
-                            "type": "string"
+                          "games": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           },
                           "created_by": {
                             "type": "string"
@@ -5597,6 +5691,56 @@
                 "cycle": {
                   "type": "integer",
                   "default": 0
+                },
+                "region": {
+                  "required": [
+                    "id",
+                    "population",
+                    "conversionRate",
+                    "leavingRate",
+                    "revenue",
+                    "cost",
+                    "growth",
+                    "index"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "population": {
+                      "type": "integer"
+                    },
+                    "conversionRate": {
+                      "type": "number"
+                    },
+                    "leavingRate": {
+                      "type": "number"
+                    },
+                    "revenue": {
+                      "type": "integer"
+                    },
+                    "cost": {
+                      "type": "integer"
+                    },
+                    "growth": {
+                      "type": "integer"
+                    },
+                    "update": {
+                      "type": "component"
+                    },
+                    "game": {
+                      "type": "string"
+                    },
+                    "index": {
+                      "type": "integer"
+                    },
+                    "created_by": {
+                      "type": "string"
+                    },
+                    "updated_by": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -5770,6 +5914,56 @@
                 "cycle": {
                   "type": "integer",
                   "default": 0
+                },
+                "region": {
+                  "required": [
+                    "id",
+                    "population",
+                    "conversionRate",
+                    "leavingRate",
+                    "revenue",
+                    "cost",
+                    "growth",
+                    "index"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "population": {
+                      "type": "integer"
+                    },
+                    "conversionRate": {
+                      "type": "number"
+                    },
+                    "leavingRate": {
+                      "type": "number"
+                    },
+                    "revenue": {
+                      "type": "integer"
+                    },
+                    "cost": {
+                      "type": "integer"
+                    },
+                    "growth": {
+                      "type": "integer"
+                    },
+                    "update": {
+                      "type": "component"
+                    },
+                    "game": {
+                      "type": "string"
+                    },
+                    "index": {
+                      "type": "integer"
+                    },
+                    "created_by": {
+                      "type": "string"
+                    },
+                    "updated_by": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }

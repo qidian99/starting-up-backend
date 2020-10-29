@@ -10,7 +10,9 @@
       "type": "string"
     },
     "cycle": {
-      "type": "integer"
+      "type": "integer",
+      "required": true,
+      "default": 0
     }
   }
 }

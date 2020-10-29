@@ -621,6 +621,56 @@
                 "cycle": {
                   "type": "integer",
                   "default": 0
+                },
+                "region": {
+                  "required": [
+                    "id",
+                    "population",
+                    "conversionRate",
+                    "leavingRate",
+                    "revenue",
+                    "cost",
+                    "growth",
+                    "index"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "population": {
+                      "type": "integer"
+                    },
+                    "conversionRate": {
+                      "type": "number"
+                    },
+                    "leavingRate": {
+                      "type": "number"
+                    },
+                    "revenue": {
+                      "type": "integer"
+                    },
+                    "cost": {
+                      "type": "integer"
+                    },
+                    "growth": {
+                      "type": "integer"
+                    },
+                    "update": {
+                      "type": "component"
+                    },
+                    "game": {
+                      "type": "string"
+                    },
+                    "index": {
+                      "type": "integer"
+                    },
+                    "created_by": {
+                      "type": "string"
+                    },
+                    "updated_by": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -794,6 +844,56 @@
                 "cycle": {
                   "type": "integer",
                   "default": 0
+                },
+                "region": {
+                  "required": [
+                    "id",
+                    "population",
+                    "conversionRate",
+                    "leavingRate",
+                    "revenue",
+                    "cost",
+                    "growth",
+                    "index"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "population": {
+                      "type": "integer"
+                    },
+                    "conversionRate": {
+                      "type": "number"
+                    },
+                    "leavingRate": {
+                      "type": "number"
+                    },
+                    "revenue": {
+                      "type": "integer"
+                    },
+                    "cost": {
+                      "type": "integer"
+                    },
+                    "growth": {
+                      "type": "integer"
+                    },
+                    "update": {
+                      "type": "component"
+                    },
+                    "game": {
+                      "type": "string"
+                    },
+                    "index": {
+                      "type": "integer"
+                    },
+                    "created_by": {
+                      "type": "string"
+                    },
+                    "updated_by": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
