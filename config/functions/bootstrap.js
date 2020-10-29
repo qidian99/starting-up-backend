@@ -98,79 +98,96 @@ module.exports = () => {
         console.log('Reset update for regions: ', regionIds);
       }
 
+      regions.forEach(async ({
+        id,
+        population,
+        conversionRate,
+        leavingRate,
+        revenue,
+        cost,
+        growth,
+        update,
+        game,
+        index,
+      }) => {
+        // Summarize users of each company based on latest update
+        // TODO: memoize users for each region
+        let users = {};
+        const regionId = id.toString();
+
+        for (let i = update.length - 1; i >= 0; i--) {
+          const regionUpdate = update[i];
+
+          const {
+            RegionUserUpdate
+          } = regionUpdate;
+
+          // console.log({
+          //   RegionUserUpdate,
+          // })
+
+          RegionUserUpdate.forEach(({
+            company,
+            count
+          }) => {
+            const companyId = typeof company === 'string' ? company : company.id.toString();
+            if (companyId in users) {
+              return;
+            }
+
+            users[companyId] = count;
+
+            // Update revenue
+            if (!(companyId in revenues)) {
+              revenues[companyId] = companyMap[companyId].fund;
+            } else {
+              revenues[companyId] = revenues[companyId] + count * revenue - cost;
+              // console.log('Updating revenue', revenues[companyId]);
+            }
+
+            if (!(companyId in regionUsers)) {
+              regionUsers[companyId] = {};
+            }
+            regionUsers[companyId][regionId] = count
+
+          });
+
+          if (Object.keys(users).length === companies.length) {
+            break;
+          }
+        }
+      });
+
+      console.log({
+        regionUsers
+      })
+
       // Update regions
       try {
-        await Promise.all(regions.map(async (region) => {
-          const {
-            id,
-            population,
-            conversionRate,
-            leavingRate,
-            revenue,
-            cost,
-            growth,
-            update,
-            game,
-            index,
-          } = region;
+        await Promise.all(regions.map(async ({
+          id,
+          population,
+          conversionRate,
+          leavingRate,
+          revenue,
+          cost,
+          growth,
+          update,
+          game,
+          index,
+        }) => {
           // Summarize users of each company based on latest update
           // TODO: memoize users for each region
-          let users = {};
           const regionId = id.toString();
-
-          for (let i = update.length - 1; i >= 0; i--) {
-            const regionUpdate = update[i];
-
-            const {
-              RegionUserUpdate
-            } = regionUpdate;
-
-            // console.log({
-            //   RegionUserUpdate,
-            // })
-
-            RegionUserUpdate.forEach(({
-              company,
-              count
-            }) => {
-              const companyId = typeof company === 'string' ? company : company.id.toString();
-              if (companyId in users) {
-                return;
-              }
-
-              users[companyId] = count;
-
-              // Update revenue
-              if (!(companyId in revenues)) {
-                revenues[companyId] = companyMap[companyId].fund;
-              } else {
-                revenues[companyId] = revenues[companyId] + count * revenue - cost;
-                console.log('Updating revenue', revenues[companyId]);
-              }
-
-              if (!(companyId in regionUsers)) {
-                regionUsers[companyId] = {};
-              }
-              regionUsers[companyId][regionId] = count
-
-            });
-
-           
-
-
-            if (Object.keys(users).length === companies.length) {
-              break;
-            }
-          }
 
           const regionCompanyUpdates = Object.keys(revenues).map(cid => {
             if (!(cid in revenues)) {
               revenues[cid] = companyMap[cid].fund;
             }
-            console.log({
-              c: companyMap[cid],
-              revenue: revenues[cid],
-            })
+            // console.log({
+            //   c: companyMap[cid],
+            //   revenue: revenues[cid],
+            // })
             return ({
               company: cid,
               bankrupt: revenues[cid] < 0,
@@ -184,29 +201,28 @@ module.exports = () => {
             cycle: newCycle,
             RegionCompanyUpdate: regionCompanyUpdates,
           };
-          update.push(newCompanyUpdate);
-          console.log({
-            RegionCompanyUpdate: regionCompanyUpdates,
-          });
-
-
-          console.log({
-            regionUsers,
-          })
+          updates.push(newCompanyUpdate);
+          // console.log({
+          //   RegionCompanyUpdate: regionCompanyUpdates,
+          // });
 
           // Update region users
           const regionUserUpdates = companies.map((c) => {
             const companyId = c.id.toString();
+            if (!(companyId in regionUsers)) {
+              regionUsers[companyId] = {};
+            }
+            const numUsers = regionUsers[companyId][regionId] || 0;
             // const adjacentRegions = getAdjacentRegionIndex()
-            if (companyId in users) {
-              users[companyId] = users[companyId] + 1;
+            if (numUsers !== 0) {
+              regionUsers[companyId][regionId] = numUsers + 1;
             } else {
-              users[companyId] = 0;
+              regionUsers[companyId][regionId] = 1;
             }
 
             return ({
               company: companyId,
-              count: users[companyId],
+              count: regionUsers[companyId][regionId],
             })
           });
 
@@ -228,9 +244,10 @@ module.exports = () => {
           //   update,
           // });
 
-          console.log(`Summary for region ${index}:`, users);
           updates.push(newRegionUpdate);
         }));
+
+        // console.log(`Summary for regions`, regionUsers);
 
 
         strapi.graphql.pubsub.publish(gameId, {
