@@ -16,6 +16,14 @@ module.exports = {
     joinGame(company: ID game: ID): [GameUpdate]
   `,
   resolver: {
+    GameUpdate: {
+      __resolveType(obj, context, info) {
+        if (obj.__typename) {
+          return obj.__typename;
+        }
+        return null;
+      },
+    },
     Query: {
     },
     Mutation: {
@@ -52,13 +60,11 @@ module.exports = {
           }, ['companies', 'fundings'])
           const userId = ctx.state.user.id;
 
-          console.log({
-            // company,
-            // userId,
-            user: ctx.state.user,
-            game,
-            companies: game.companies,
-          })
+          // console.log({
+          //   user: ctx.state.user,
+          //   game,
+          //   companies: game.companies,
+          // })
 
           if (!game) {
             throw new Error("Game does not exist");
@@ -76,10 +82,10 @@ module.exports = {
             throw new Error("Company does not exist");
           }
 
-          console.log({
-            companyUser: company.user,
-            userId,
-          })
+          // console.log({
+          //   companyUser: company.user,
+          //   userId,
+          // })
           if (company.user != userId) { // shadow equal for objectId and string
             throw new Error("Company does not belong to current user");
           }
@@ -90,39 +96,41 @@ module.exports = {
           //   options,
           // });
 
-         
+
           const updateParams = {
           }
+          if (game.numCompanies === game.companies) {
+            throw new Error("Number of companies exceed game limit.");
+          }
+
           const newCompanies = game.companies;
 
           // If the user has not joined the game yet, add the user to the game
-          if (_.findIndex(game.companies, ({ id }) => id === companyId) === -1) {
+          if (_.findIndex(game.companies, ({ id }) => id.toString() === companyId) === -1) {
             console.log(`Company ${companyId} not found. Adding it to game ${game.id}`);
             newCompanies.push(companyId);
             updateParams.companies = newCompanies;
           }
 
-          console.log('Checking if game should start', game.numCompanies === newCompanies.length);
+          console.log('Checking if game should start', game.numCompanies, newCompanies.length, game.numCompanies === newCompanies.length);
 
           if (game.numCompanies === newCompanies.length) {
             updateParams.started = true;
-          } else if (game.numCompanies < newCompanies.length) {
-            throw new Error("Number of companies exceed game limit.");
           }
 
           game = await strapi.query('game').update({
             id: game.id,
           }, updateParams, ['companies', 'fundings', 'regions'])
 
-          console.log('Updated game', {
-            game,
-          })
+          // console.log('Updated game', {
+          //   game,
+          // })
 
           if (!strapi.games[id]) {
             strapi.games[id] = game;
           }
 
-          
+
           // setInterval(() => {
           //   strapi.graphql.pubsub.publish(options.channel, {
           //     onCustomSubscription: `Count: ${count}`

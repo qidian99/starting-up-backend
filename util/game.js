@@ -35,6 +35,7 @@ const createFundingsForSimpleGame = async () => {
 const createRegionsForSimpleGame = async (width = simpleGameWidth, height = simpleGameHeight) => {
   return await Promise.all(Array(width * height).fill(simpleGameRegion).map((_, index) => strapi.query('region').create({
     index,
+    ...simpleGameRegion,
   })));
 }
 
