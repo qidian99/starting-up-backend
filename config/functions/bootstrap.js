@@ -162,7 +162,7 @@ module.exports = () => {
             revenue,
             cost,
             growth,
-            update,
+            update, 
             game,
             index,
           }) => {
@@ -197,7 +197,7 @@ module.exports = () => {
                 if (!(companyId in revenues)) {
                   revenues[companyId] = companyMap[companyId].fund;
                 } else {
-                  revenues[companyId] = revenues[companyId] + count * revenue - cost;
+                  revenues[companyId] = revenues[companyId] + count * revenue - cost
                   // console.log('Updating revenue', revenues[companyId]);
                 }
 
@@ -285,6 +285,10 @@ module.exports = () => {
           const companyUserUpdates = Object.keys(revenues).map(cid => {
             if (!(cid in revenues)) {
               revenues[cid] = companyMap[cid].fund;
+            }
+
+            if (matchedFunding) {
+              revenues[cid] = revenues[cid] + matchedFunding.amount;
             }
             // console.log({
             //   c: companyMap[cid],
