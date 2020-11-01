@@ -3,6 +3,7 @@
 const { forEach } = require('lodash');
 const _ = require('lodash');
 const { getAdjacentRegionIndex } = require('starting-up-common');
+const { initializeSinglePlayerGame, updateCompaniesRevenue, computeGrowthRegions, updateCompanyStrategies, updateCompanyRevenues, updateRegionUsers } = require('../../util/game');
 
 
 /**
@@ -18,6 +19,7 @@ const { getAdjacentRegionIndex } = require('starting-up-common');
 module.exports = () => {
   // The global game instances. This is the master version of all the games
   strapi.games = {}
+
   setInterval(async () => {
     Object.keys(strapi.games).forEach(async (gameId) => {
       const game = strapi.games[gameId];
@@ -35,7 +37,7 @@ module.exports = () => {
         return;
       }
 
-      /* Initialization of variables */
+      /* Check for game end */
       if (cycle >= numCycles) {
         delete strapi.games[gameId];
         strapi.graphql.pubsub.publish(gameId, {
@@ -48,23 +50,41 @@ module.exports = () => {
         return;
       }
 
+      /* Initialization of variables */
       const updates = [];
 
-      const companyMap = {}
-      companies.forEach((c) => companyMap[c.id.toString()] = c);
+      if (!('companyMap' in game)) {
+        game.companyMap = {}
+        companies.forEach((c) => game.companyMap[c.id.toString()] = c);
+      }
 
       if (!('revenues' in game)) {
         game.revenues = {};
       }
-      const revenues = game.revenues;
-
 
       if (!('regionUsers' in game)) {
         game.regionUsers = {};
       }
-      const regionUsers = game.regionUsers;
-      /* End of initialization of variables */
 
+      if (!('orderedFundings' in game)) {
+        game.orderedFundings = _.orderBy(fundings, ['cycle'], ['asc']);
+      }
+
+      if (!('regionMap' in game)) {
+        const temp = {}
+        regions.forEach((r) => {
+          temp[r.id.toString()] = r;
+        });
+        game.regionMap = temp;
+      }
+
+      // Update fundings, simple static logic for fixed cycles
+      const orderedFundings = game.orderedFundings;
+      const companyMap = game.companyMap;
+      const revenues = game.revenues;
+      const regionUsers = game.regionUsers;
+      const regionMap = game.regionMap;
+      /* End of initialization of variables */
 
       // Update cycle
       const newCycle = cycle + 1;
@@ -75,13 +95,17 @@ module.exports = () => {
       })
       game.cycle = newCycle;
 
+      // Convert MongoDB long int to int: https://mongodb.github.io/node-mongodb-native/api-bson-generated/long.html
+      const matchedFunding = _.find(orderedFundings, (f) => f.cycle.toInt() === newCycle);
+
       try {
         // Reset all regions update when the game starts from cycle 0
+        // Other initialization of the game also happen in cycle 0
         if (cycle === 0) {
           const regionIds = regions.map(({ id }) => id.toString());
-          console.log({
-            regionIds
-          })
+          // console.log({
+          //   regionIds
+          // })
           await strapi.query('region').update({
             id: regionIds,
           }, {
@@ -90,56 +114,12 @@ module.exports = () => {
           // console.log('Reset update for regions: ', regionIds);
 
           // Initialize initial funds and users
-          if (companies.length === 1) { // support one player game for now
-            const company = companies[0];
-            const companyId = company.id.toString();
-            const row = Math.ceil((height - 1) / 2);
-            const column = Math.ceil((width - 1) / 2);
-            const incubationRegion = _.find(regions, ({ index }) => index === row * width + column )
-
-            const {
-              update,
-              id,
-            } = incubationRegion;
-            const regionId = id.toString();
-
-            // console.log({
-            //   incubation
-            // })
-
-            if (!('companyId' in regionUsers)) {
-              regionUsers[companyId] = {};
-            }
-
-            regionUsers[companyId][regionId] = 10;
-
-
-            const regionUserUpdates = [{
-              company: companyId,
-              count: regionUsers[companyId][regionId],
-            }];
-
-            // Added initial users for this region
-            const newRegionUpdate = {
-              __typename: "ComponentGameRegionUpdate",
-              cycle: newCycle,
-              region: regionId,
-              RegionUserUpdate: regionUserUpdates,
-            };
-            update.push(newRegionUpdate);
-            updates.push(newRegionUpdate);
+          if (companies.length === 1) { // one player game
+            initializeSinglePlayerGame(game, companies, height, width, regions, regionUsers, newCycle, updates)
           }
-
         } else {
-
-          // Update fundings, simple static logic for fixed cycles
-          const orderedFundings = _.orderBy(fundings, ['cycle'], ['asc']);
-          // Convert MongoDB long int to int: https://mongodb.github.io/node-mongodb-native/api-bson-generated/long.html
-          const matchedFunding = _.find(orderedFundings, (f) => f.cycle.toInt() === newCycle);
-          // console.log({
-          //   orderedFundings,
-          //   matchedFunding,
-          // })
+          // If we are in a new funding phase, increment the user's revenue by 
+          // the amount of that funding.
           if (matchedFunding) {
             console.log(`New funding in cycle ${newCycle}`, matchedFunding);
 
@@ -152,166 +132,33 @@ module.exports = () => {
               })),
             });
           }
+          // console.log({ regionUsers });
 
-
-          regions.forEach(async ({
-            id,
-            population,
-            conversionRate,
-            leavingRate,
-            revenue,
-            cost,
-            growth,
-            update, 
-            game,
-            index,
-          }) => {
-            // Summarize users of each company based on latest update
-            // TODO: memoize users for each region
-            let users = {};
-            const regionId = id.toString();
-
-            for (let i = update.length - 1; i >= 0; i--) {
-              const regionUpdate = update[i];
-
-              const {
-                RegionUserUpdate
-              } = regionUpdate;
-
-              // console.log({
-              //   RegionUserUpdate,
-              // })
-
-              RegionUserUpdate.forEach(({
-                company,
-                count
-              }) => {
-                const companyId = typeof company === 'string' ? company : company.id.toString();
-                if (companyId in users) {
-                  return;
-                }
-
-                users[companyId] = count;
-
-                // Update revenue
-                if (!(companyId in revenues)) {
-                  revenues[companyId] = companyMap[companyId].fund;
-                } else {
-                  revenues[companyId] = revenues[companyId] + count * revenue - cost
-                  // console.log('Updating revenue', revenues[companyId]);
-                }
-
-                if (!(companyId in regionUsers)) {
-                  regionUsers[companyId] = {};
-                }
-                regionUsers[companyId][regionId] = count
-
-              });
-
-              if (Object.keys(users).length === companies.length) {
-                break;
-              }
-            }
-          });
-
-          // console.log({
-          //   regionUsers
-          // })
+          updateCompaniesRevenue(companies, regionUsers, regionMap, revenues, companyMap)
 
           // Update regions
-          await Promise.all(regions.map(async ({
-            id,
-            population,
-            conversionRate,
-            leavingRate,
-            revenue,
-            cost,
-            growth,
-            update,
-            game,
-            index,
-          }) => {
-            // Summarize users of each company based on latest update
-            // TODO: memoize users for each region
-            const regionId = id.toString();
+          let companyRegions = {}; // Will be populated
+          const companyStrategies = {}; // Will be populated
 
-            // console.log({
-            //   RegionCompanyUpdate: regionCompanyUpdates,
-            // });
+          updateCompanyStrategies(companies, fundings, cycle, companyStrategies)
+          computeGrowthRegions(companies, companyStrategies, regionUsers, regionMap, companyRegions, regions, width, height);
 
-            // Update region users
-            const regionUserUpdates = companies.map((c) => {
-              const companyId = c.id.toString();
-              if (!(companyId in regionUsers)) {
-                regionUsers[companyId] = {};
-              }
-              const numUsers = regionUsers[companyId][regionId] || 0;
-              // const adjacentRegions = getAdjacentRegionIndex()
-              if (numUsers !== 0) {
-                regionUsers[companyId][regionId] = numUsers + 1;
-              } else {
-                regionUsers[companyId][regionId] = 1;
-              }
-
-              return ({
-                company: companyId,
-                count: regionUsers[companyId][regionId],
-              })
-            });
-
-            // console.log({
-            //   regionUserUpdates
-            // })
-
-            const newRegionUpdate = {
-              __typename: "ComponentGameRegionUpdate",
-              cycle: newCycle,
-              region: regionId,
-              RegionUserUpdate: regionUserUpdates,
-            };
-            update.push(newRegionUpdate);
-
-            // await strapi.query('region').update({
-            //   id,
-            // }, {
-            //   update,
-            // });
-
-            updates.push(newRegionUpdate);
-          }));
+          const populatedRegionIds = _.flatten(_.map(_.values(companyRegions), (set) => [...set]));
+          const populatedRegions = _.values(_.pick(regionMap, populatedRegionIds));
+          // console.log({
+          //   ids: populatedRegionIds,
+          //   regions: _.values(_.pick(regionMap, populatedRegionIds))
+          // })
+          await updateRegionUsers(populatedRegions, companies, companyRegions, regionUsers, newCycle, updates);
 
           // console.log(`Summary for regions`, regionUsers);
 
-          const companyUserUpdates = Object.keys(revenues).map(cid => {
-            if (!(cid in revenues)) {
-              revenues[cid] = companyMap[cid].fund;
-            }
-
-            if (matchedFunding) {
-              revenues[cid] = revenues[cid] + matchedFunding.amount;
-            }
-            // console.log({
-            //   c: companyMap[cid],
-            //   revenue: revenues[cid],
-            // })
-            return ({
-              company: cid,
-              bankrupt: revenues[cid] < 0,
-              revenue: revenues[cid]
-            })
-          });
-
-          // Update company status
-          const newCompanyUpdate = {
-            __typename: "ComponentGameCompanyUpdate",
-            cycle: newCycle,
-            CompanyUserUpdate: companyUserUpdates,
-          };
-          updates.push(newCompanyUpdate);
+          updateCompanyRevenues(revenues, companyMap, matchedFunding, newCycle, updates)
         }
       } catch (e) {
-        console.log("Update regions error: ", e)
+        console.log("Game error: ", e)
       } finally {
+        // Publish the updates
         strapi.graphql.pubsub.publish(gameId, {
           joinGame: updates,
         });

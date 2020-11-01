@@ -13,7 +13,7 @@ module.exports = {
   `,
   subscription: `
     onCustomSubscription(channel: String): String
-    joinGame(company: ID game: ID): [GameUpdate]
+    joinGame(company: ID game: ID!): [GameUpdate]
   `,
   resolver: {
     GameUpdate: {
@@ -55,6 +55,8 @@ module.exports = {
         resolverOf: 'plugins::users-permissions.user.me',
         subscribe: async (obj, options, ctx) => {
           const { company: companyId, game: id } = options;
+          console.log(`Joining game ${id}`);
+
           let game = await strapi.query('game').findOne({
             id,
           }, ['companies', 'fundings'])
@@ -112,7 +114,7 @@ module.exports = {
             updateParams.companies = newCompanies;
           }
 
-          console.log('Checking if game should start', game.numCompanies, newCompanies.length, game.numCompanies === newCompanies.length);
+          console.log(`Checking if game ${game.id} should start`, game.numCompanies, newCompanies.length, game.numCompanies === newCompanies.length);
 
           if (game.numCompanies === newCompanies.length) {
             updateParams.started = true;
