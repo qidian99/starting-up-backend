@@ -2,7 +2,7 @@
 
 const { forEach } = require('lodash');
 const _ = require('lodash');
-const { getAdjacentRegionIndex } = require('starting-up-common');
+const { getAdjacentRegionIndex, MSG_TYPES } = require('starting-up-common');
 const { initializeSinglePlayerGame, updateCompaniesRevenue, computeGrowthRegions, updateCompanyStrategies, updateCompanyRevenues, updateRegionUsers } = require('../../util/game');
 
 
@@ -33,20 +33,26 @@ module.exports = () => {
         regions,
         cycle,
       } = game;
+
+      // If game does not have enough player, will not start simulation
       if (!started) {
         return;
       }
 
-      /* Check for game end */
-      if (cycle >= numCycles) {
+      function gameOver () {
         delete strapi.games[gameId];
         strapi.graphql.pubsub.publish(gameId, {
           joinGame: [{
             __typename: "ComponentGameInfoUpdate",
-            message: `Game ends`,
+            message: MSG_TYPES.GAME_OVER,
             cycle,
           }],
         });
+      }
+
+      /* Check for game end */
+      if (cycle >= numCycles) {
+        gameOver();
         return;
       }
 
@@ -78,6 +84,7 @@ module.exports = () => {
         game.regionMap = temp;
       }
 
+
       // Update fundings, simple static logic for fixed cycles
       const orderedFundings = game.orderedFundings;
       const companyMap = game.companyMap;
@@ -85,6 +92,24 @@ module.exports = () => {
       const regionUsers = game.regionUsers;
       const regionMap = game.regionMap;
       /* End of initialization of variables */
+
+
+      /* If all companies go bankrupt, game over */
+      let end = true;
+      let money = Object.values(revenues);
+      if (money.length === 0) {
+        end = false;
+      }
+      for (let i = 0; i < money.length; i++) {
+        if (money[i] > 0) {
+          end = false;
+          break;
+        } 
+      }
+      if (end) {
+        gameOver();
+        return;
+      }
 
       // Update cycle
       const newCycle = cycle + 1;
