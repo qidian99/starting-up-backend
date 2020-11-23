@@ -3,7 +3,7 @@
 const { forEach } = require('lodash');
 const _ = require('lodash');
 const { getAdjacentRegionIndex, MSG_TYPES } = require('starting-up-common');
-const { initializeSinglePlayerGame, updateCompaniesRevenue, computeGrowthRegions, updateCompanyStrategies, updateCompanyRevenues, updateRegionUsers } = require('../../util/game');
+const { initializeSinglePlayerGame, updateCompaniesRevenueForRegions, computeValidRegionsForUpdate, updateCompanyStrategies, computeRevenueDiff, updateRegionUsers } = require('../../util/game');
 
 
 /**
@@ -32,6 +32,7 @@ module.exports = () => {
         fundings,
         regions,
         cycle,
+        update: gameUpdate,
       } = game;
 
       // If game does not have enough player, will not start simulation
@@ -39,15 +40,32 @@ module.exports = () => {
         return;
       }
 
-      function gameOver () {
+      async function gameOver () {
         delete strapi.games[gameId];
+        const info = {
+          __typename: "ComponentGameInfoUpdate",
+          __component: "game.info-update",
+          message: MSG_TYPES.GAME_OVER,
+          cycle,
+        };
+        gameUpdate.push(info);
+        console.log("Game over", gameUpdate);
         strapi.graphql.pubsub.publish(gameId, {
-          joinGame: [{
-            __typename: "ComponentGameInfoUpdate",
-            message: MSG_TYPES.GAME_OVER,
-            cycle,
-          }],
+          joinGame: [info],
         });
+
+        // return;
+
+        try {
+          const game = await strapi.query('game').update({
+            id: gameId
+          }, {
+            cycle,
+            update: gameUpdate,
+          });
+        } catch (e) {
+          console.log(e);
+        }
       }
 
       /* Check for game end */
@@ -89,6 +107,7 @@ module.exports = () => {
       const orderedFundings = game.orderedFundings;
       const companyMap = game.companyMap;
       const revenues = game.revenues;
+      const oldRevenues = { ...revenues };
       const regionUsers = game.regionUsers;
       const regionMap = game.regionMap;
       /* End of initialization of variables */
@@ -96,6 +115,7 @@ module.exports = () => {
 
       /* If all companies go bankrupt, game over */
       let end = true;
+      console.log({ revenues })
       let money = Object.values(revenues);
       if (money.length === 0) {
         end = false;
@@ -113,11 +133,13 @@ module.exports = () => {
 
       // Update cycle
       const newCycle = cycle + 1;
-      updates.push({
+      const info = {
         __typename: "ComponentGameInfoUpdate",
+        __component: "game.info-update",
         message: `Entering cycle ${newCycle}`,
         cycle: newCycle,
-      })
+      };
+      updates.push(info)
       game.cycle = newCycle;
 
       // Convert MongoDB long int to int: https://mongodb.github.io/node-mongodb-native/api-bson-generated/long.html
@@ -140,7 +162,7 @@ module.exports = () => {
 
           // Initialize initial funds and users
           if (companies.length === 1) { // one player game
-            initializeSinglePlayerGame(game, companies, height, width, regions, regionUsers, newCycle, updates)
+            initializeSinglePlayerGame(game, companies, height, width, regions, regionUsers, revenues, newCycle, updates)
           }
         } else {
           // If we are in a new funding phase, increment the user's revenue by 
@@ -150,6 +172,7 @@ module.exports = () => {
 
             updates.push({
               __typename: "ComponentGameFundingUpdate",
+              __component: "game.funding-update",
               cycle: newCycle,
               FundingUserUpdate: companies.map(c => ({
                 company: c.id.toString(),
@@ -159,14 +182,14 @@ module.exports = () => {
           }
           // console.log({ regionUsers });
 
-          updateCompaniesRevenue(companies, regionUsers, regionMap, revenues, companyMap)
+          updateCompaniesRevenueForRegions(companies, regionUsers, regionMap, revenues, companyMap)
 
           // Update regions
           let companyRegions = {}; // Will be populated
           const companyStrategies = {}; // Will be populated
 
           updateCompanyStrategies(companies, fundings, cycle, companyStrategies)
-          computeGrowthRegions(companies, companyStrategies, regionUsers, regionMap, companyRegions, regions, width, height);
+          computeValidRegionsForUpdate(companies, companyStrategies, regionUsers, regionMap, companyRegions, regions, width, height);
 
           const populatedRegionIds = _.flatten(_.map(_.values(companyRegions), (set) => [...set]));
           const populatedRegions = _.values(_.pick(regionMap, populatedRegionIds));
@@ -178,7 +201,7 @@ module.exports = () => {
 
           // console.log(`Summary for regions`, regionUsers);
 
-          updateCompanyRevenues(revenues, companyMap, matchedFunding, newCycle, updates)
+          computeRevenueDiff(revenues, oldRevenues, companyMap, matchedFunding, newCycle, updates)
         }
       } catch (e) {
         console.log("Game error: ", e)
@@ -187,6 +210,7 @@ module.exports = () => {
         strapi.graphql.pubsub.publish(gameId, {
           joinGame: updates,
         });
+        gameUpdate.push(...updates);
       }
     });
     // console.log(strapi.games);

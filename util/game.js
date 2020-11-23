@@ -7,6 +7,7 @@ const {
   simpleGameNumCycles,
   simpleGameRegion,
   getAdjacentRegionIndex,
+  simpleGameInitialUsers,
 } = require('starting-up-common')
 
 // console.log(
@@ -41,7 +42,7 @@ const createRegionsForSimpleGame = async (width = simpleGameWidth, height = simp
 }
 
 
-const initializeSinglePlayerGame = (game, companies, height, width, regions, regionUsers, newCycle, updates, initialUsers = 10) => {
+const initializeSinglePlayerGame = (game, companies, height, width, regions, regionUsers, revenues, newCycle, updates, initialUsers = simpleGameInitialUsers) => {
   const company = companies[0];
   const companyId = company.id.toString();
   const row = Math.ceil((height - 1) / 2);
@@ -66,15 +67,30 @@ const initializeSinglePlayerGame = (game, companies, height, width, regions, reg
   }];
   const newRegionUpdate = {
     __typename: "ComponentGameRegionUpdate",
+    __component: "game.region-update",
     cycle: newCycle,
     region: regionId,
     RegionUserUpdate: regionUserUpdates,
   };
   update.push(newRegionUpdate);
   updates.push(newRegionUpdate);
+
+
+  const newCompanyUpdate = {
+    __typename: "ComponentGameCompanyUpdate",
+    __component: "game.company-update",
+    cycle: newCycle,
+    CompanyUserUpdate: [{
+      company: companyId,
+      bankrupt: false,
+      revenue: company.fund,
+    }],
+  };
+  revenues[companyId] = company.fund;
+  updates.push(newCompanyUpdate);
 }
 
-const updateCompanyRevenue = (regionUserRegions, regionUsers, companyId, revenues, companyMap) => _.values(regionUserRegions).forEach(({
+const updateCompanyRevenueForRegions = (regionUserRegions, regionUsers, companyId, revenues, companyMap) => _.values(regionUserRegions).forEach(({
   id,
   population,
   conversionRate,
@@ -93,27 +109,27 @@ const updateCompanyRevenue = (regionUserRegions, regionUsers, companyId, revenue
   if (!(companyId in revenues)) {
     revenues[companyId] = companyMap[companyId].fund;
   } else {
-    revenues[companyId] = revenues[companyId] + count * revenue - cost
+    revenues[companyId] = revenues[companyId] + count * revenue - (count > 0 ? cost : 0);
   }
+  console.log('updateCompanyRevenueForRegions', revenues);
+
 })
 
-function updateCompaniesRevenue(companies,  regionUsers, regionMap, revenues, companyMap) {
+function updateCompaniesRevenueForRegions(companies, regionUsers, regionMap, revenues, companyMap) {
   return companies.map(({ id }) => {
     const companyId = id.toString();
+    if (!(companyId in regionUsers)) regionUsers[companyId] = {}
     console.log(companyId, regionUsers[companyId]);
 
+    // Get the region ids from regionUsers
     const regionUserIds = Object.keys(regionUsers[companyId]);
+    // Get the region objects from regionMap
     const regionUserRegions = _.pick(regionMap, regionUserIds);
-    // console.log({
-    //   regionUsers,
-    //   regionsUserRegions: regionUserRegions,
-    // });
-
-    updateCompanyRevenue(regionUserRegions, regionUsers, companyId, revenues, companyMap)
+    updateCompanyRevenueForRegions(regionUserRegions, regionUsers, companyId, revenues, companyMap)
   });
 }
 
-const computeGrowthRegions = (companies, companyStrategies, regionUsers, regionMap, companyRegions, regions, width, height) => companies.forEach((c) => {
+const computeValidRegionsForUpdate = (companies, companyStrategies, regionUsers, regionMap, companyRegions, regions, width, height) => companies.forEach((c) => {
   const companyId = c.id.toString();
 
   // Threshold is when the company can expand
@@ -121,10 +137,10 @@ const computeGrowthRegions = (companies, companyStrategies, regionUsers, regionM
   const regionUserIds = Object.keys(regionUsers[companyId]);
   const regionUserRegions = _.pick(regionMap, regionUserIds);
 
-  console.log({
-    companyStrategies,
-    threshold,
-  })
+  // console.log({
+  //   companyStrategies,
+  //   threshold,
+  // })
 
   _.values(regionUserRegions).forEach(({ id, population, index }) => {
     const regionId = id.toString();
@@ -173,7 +189,7 @@ const computeNewUsers = (users, population, conversionRate, leavingRate) => {
     newUsers -= monteCarlo(users, leavingRate);
   }
   const delta = monteCarlo(population - users, conversionRate);
-  
+
   if (delta === 0) {
   }
 
@@ -230,13 +246,19 @@ async function updateRegionUsers(populatedRegions, companies, companyRegions, re
           if (delta > 0) {
             regionUsers[companyId][regionId] = delta;
           } else {
+            regionUsers[companyId][regionId] = 0;
             return;
           }
         }
-        return ({
-          company: companyId,
-          count: regionUsers[companyId][regionId] || 0,
-        })
+
+        const diff = regionUsers[companyId][regionId] - numUsers;
+
+        if (diff !== 0) {
+          return ({
+            company: companyId,
+            count: regionUsers[companyId][regionId] - numUsers,
+          });
+        }
       }
     }));
 
@@ -244,13 +266,17 @@ async function updateRegionUsers(populatedRegions, companies, companyRegions, re
     //   regionUserUpdates
     // })
 
-    const newRegionUpdate = {
-      __typename: "ComponentGameRegionUpdate",
-      cycle: newCycle,
-      region: regionId,
-      RegionUserUpdate: regionUserUpdates,
-    };
-    update.push(newRegionUpdate);
+    if (regionUserUpdates.length > 0) {
+      const newRegionUpdate = {
+        __typename: "ComponentGameRegionUpdate",
+        __component: "game.region-update",
+        cycle: newCycle,
+        region: regionId,
+        RegionUserUpdate: regionUserUpdates,
+      };
+      update.push(newRegionUpdate);
+      updates.push(newRegionUpdate);
+    }
 
     // await strapi.query('region').update({
     //   id,
@@ -258,33 +284,38 @@ async function updateRegionUsers(populatedRegions, companies, companyRegions, re
     //   update,
     // });
 
-    updates.push(newRegionUpdate);
   }));
 }
 
-function updateCompanyRevenues(revenues, companyMap, matchedFunding, newCycle, updates) {
-  const companyUserUpdates = Object.keys(revenues).map(cid => {
+function computeRevenueDiff(revenues, oldRevenues, companyMap, matchedFunding, newCycle, updates) {
+  const companyUserUpdates = _.filter(Object.keys(revenues).map(cid => {
+
+    const oldRevenue = oldRevenues[cid] || 0;
+    let newRevenue = revenues[cid] || 0;
     if (!(cid in revenues)) {
-      revenues[cid] = companyMap[cid].fund;
+      newRevenue = companyMap[cid].fund;
     }
 
     if (matchedFunding) {
-      revenues[cid] = revenues[cid] + matchedFunding.amount;
+      newRevenue = oldRevenue + matchedFunding.amount;
     }
-    // console.log({
-    //   c: companyMap[cid],
-    //   revenue: revenues[cid],
-    // })
-    return ({
-      company: cid,
-      bankrupt: revenues[cid] < 0,
-      revenue: revenues[cid]
-    })
-  });
+    revenues[cid] = newRevenue
+    const diff = newRevenue - oldRevenue;
+
+    if (diff !== 0) {
+      return ({
+        company: cid,
+        bankrupt: revenues[cid] < 0,
+        revenue: diff,
+      });
+    }
+  }));
+
 
   // Update company status
   const newCompanyUpdate = {
     __typename: "ComponentGameCompanyUpdate",
+    __component: "game.company-update",
     cycle: newCycle,
     CompanyUserUpdate: companyUserUpdates,
   };
@@ -302,10 +333,10 @@ module.exports = {
   createFundingsForSimpleGame,
   createRegionsForSimpleGame,
   initializeSinglePlayerGame,
-  updateCompanyRevenue,
-  updateCompaniesRevenue,
-  computeGrowthRegions,
+  updateCompanyRevenueForRegions,
+  updateCompaniesRevenueForRegions,
+  computeValidRegionsForUpdate,
   updateCompanyStrategies,
   updateRegionUsers,
-  updateCompanyRevenues,
+  computeRevenueDiff,
 }

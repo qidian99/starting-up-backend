@@ -10,8 +10,7 @@
       "model": "company"
     },
     "revenue": {
-      "type": "integer",
-      "min": 0
+      "type": "integer"
     },
     "bankrupt": {
       "type": "boolean",
