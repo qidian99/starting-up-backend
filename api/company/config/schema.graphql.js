@@ -10,6 +10,7 @@ module.exports = {
   }
   `,
   query: `
+  myCompanies: [Company]
   `,
   mutation: `
   registerCompany(name: String! strategy: SimpleStrategyInput!): Company
@@ -18,12 +19,16 @@ module.exports = {
   `,
   resolver: {
     Query: {
+      myCompanies: {
+        policies: [],
+        resolver: 'application::company.company.myCompanies',
+      },
     },
     Mutation: {
       registerCompany: {
         policies: [],
         resolver: 'application::company.company.createCompany',
-      }
+      },
     },
     Subscription: {
     }

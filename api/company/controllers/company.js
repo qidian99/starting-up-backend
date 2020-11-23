@@ -8,6 +8,14 @@
 
 module.exports = {
 
+  async myCompanies(ctx) {
+    const userId = ctx.state.user.id;
+    const companies = await strapi.query('company').find({
+      user: userId
+    });
+    return companies;
+  },
+
   async createCompany(ctx) {
     const { name, strategy } = ctx.request.body
     const user = ctx.state.user._id;
