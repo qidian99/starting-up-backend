@@ -111,7 +111,7 @@ const updateCompanyRevenueForRegions = (regionUserRegions, regionUsers, companyI
   } else {
     revenues[companyId] = revenues[companyId] + count * revenue - (count > 0 ? cost : 0);
   }
-  console.log('updateCompanyRevenueForRegions', revenues);
+  // console.log('updateCompanyRevenueForRegions', revenues);
 
 })
 
@@ -137,18 +137,18 @@ const computeValidRegionsForUpdate = (companies, companyStrategies, regionUsers,
   const regionUserIds = Object.keys(regionUsers[companyId]);
   const regionUserRegions = _.pick(regionMap, regionUserIds);
 
-  // console.log({
-  //   companyStrategies,
-  //   threshold,
-  // })
+  console.log({
+    companyStrategies,
+    threshold,
+  })
 
   _.values(regionUserRegions).forEach(({ id, population, index }) => {
     const regionId = id.toString();
     const numUsers = regionUsers[companyId][regionId] || 0;
-    let rs = [];
+    let rs = [...(companyRegions[companyId] || [])];
     // if ((numUsers > population * threshold) || true) {
     if ((numUsers > population * threshold)) {
-      rs = [...(companyRegions[companyId] || []), ...(_.filter(regions, ({ index: regionIndex }) => (_.includes(getAdjacentRegionIndex(index, width, height), regionIndex))).map(r => r.id.toString()))];
+      rs = [...rs, ...(_.filter(regions, ({ index: regionIndex }) => (_.includes(getAdjacentRegionIndex(index, width, height), regionIndex))).map(r => r.id.toString()))];
       // console.log('computing adjacent regions', index, companyRegions[companyId]);
     }
 
@@ -156,6 +156,8 @@ const computeValidRegionsForUpdate = (companies, companyStrategies, regionUsers,
     if (numUsers > 0) {
       rs.push(regionId);
     }
+
+    console.log({ rs });
 
     companyRegions[companyId] = new Set(rs);
   });
@@ -227,21 +229,22 @@ async function updateRegionUsers(populatedRegions, companies, companyRegions, re
     // Update region users
     const regionUserUpdates = _.filter(companies.map((c) => {
       const companyId = c.id.toString();
+      console.log('companyRegions', companyRegions[companyId])
       if (companyRegions[companyId].has(regionId)) {
         const numUsers = regionUsers[companyId][regionId] || 0;
         // Computed conversion rate
         const adjustedConversionRate = calculateConversionRate(conversionRate, numUsers);
         const adjustedLeavingRate = calculateLeavingRate(leavingRate, numUsers);
 
-        // console.log({
-        //   adjustedConversionRate,
-        //   adjustedLeavingRate,
-        // })
+        console.log({
+          adjustedConversionRate,
+          adjustedLeavingRate,
+        })
         if (numUsers !== 0) {
           // regionUsers[companyId][regionId] = numUsers + 1;
           regionUsers[companyId][regionId] = computeNewUsers(numUsers, population, adjustedConversionRate, adjustedLeavingRate);
         } else {
-          console.log(`0 user in region ${regionId} of index ${index}`);
+          // console.log(`0 user in region ${regionId} of index ${index}`);
           const delta = computeNewUsers(numUsers, population, adjustedConversionRate, adjustedLeavingRate);
           if (delta > 0) {
             regionUsers[companyId][regionId] = delta;

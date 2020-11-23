@@ -193,10 +193,10 @@ module.exports = () => {
 
           const populatedRegionIds = _.flatten(_.map(_.values(companyRegions), (set) => [...set]));
           const populatedRegions = _.values(_.pick(regionMap, populatedRegionIds));
-          // console.log({
-          //   ids: populatedRegionIds,
-          //   regions: _.values(_.pick(regionMap, populatedRegionIds))
-          // })
+          console.log({
+            ids: populatedRegionIds,
+            regions: _.values(_.pick(regionMap, populatedRegionIds))
+          })
           await updateRegionUsers(populatedRegions, companies, companyRegions, regionUsers, newCycle, updates);
 
           // console.log(`Summary for regions`, regionUsers);

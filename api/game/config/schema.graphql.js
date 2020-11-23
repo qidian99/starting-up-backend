@@ -1,5 +1,6 @@
 const { update } = require('lodash');
 const _ = require('lodash');
+const { COMPANY_ERRORS, GAME_ERRORS } = require('starting-up-common');
 
 module.exports = {
 
@@ -74,8 +75,20 @@ module.exports = {
           // })
 
           if (!game) {
-            throw new Error("Game does not exist");
+            throw new Error(GAME_ERRORS.NOT_EXIST);
           }
+
+          if (game.update.length > 0) {
+            if (!game.finished) {
+              await strapi.query('game').update({
+                id: game.id,
+              }, {
+                finished: true,
+              })
+            }
+            throw new Error(GAME_ERRORS.ALREADY_ENDED);
+          }
+
           const company = await strapi.query('company').findOne({
             id: companyId
           }, [])
@@ -86,28 +99,18 @@ module.exports = {
           // })
 
           if (!company) {
-            throw new Error("Company does not exist");
+            throw new Error(COMPANY_ERRORS.NOT_EXIST);
           }
 
-          // console.log({
-          //   companyUser: company.user,
-          //   userId,
-          // })
           if (company.user != userId) { // shadow equal for objectId and string
-            throw new Error("Company does not belong to current user");
+            throw new Error(COMPANY_ERRORS.NOT_BELONG_TO_CURRENT_USER);
           }
-
-          // console.log({
-          //   obj,
-          //   ctx,
-          //   options,
-          // });
-
-
           const updateParams = {
           }
-          if (game.numCompanies === game.companies) {
-            throw new Error("Number of companies exceed game limit.");
+
+          if (game.numCompanies <= game.companies) {
+            console.log(game.numCompanies, game.companies)
+            throw new Error(GAME_ERRORS.EXCEED_LIMIT);
           }
 
           const newCompanies = game.companies;

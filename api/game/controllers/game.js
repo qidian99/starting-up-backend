@@ -21,11 +21,12 @@ module.exports = {
     const companies = await strapi.query('company').find({
       user: userId
     }, []);
-    console.log("companies", companies)
+    // console.log("companies", companies)
 
+    // const games = await strapi.query('game').model.find({});
     const games = await strapi.query('game').find({
       companies_in: _.map(companies, 'id'),
-    }, ['companies', 'fundings'])
+    }, []);
 
     console.log("games", games)
     return games;
