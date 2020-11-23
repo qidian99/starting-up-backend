@@ -661,6 +661,9 @@
                 "status": {
                   "type": "component"
                 },
+                "finished": {
+                  "type": "boolean"
+                },
                 "created_by": {
                   "type": "string"
                 },

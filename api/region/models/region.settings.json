@@ -16,14 +16,14 @@
       "required": true
     },
     "conversionRate": {
-      "type": "decimal",
+      "type": "float",
       "default": 0,
       "max": 1,
       "min": 0,
       "required": true
     },
     "leavingRate": {
-      "type": "decimal",
+      "type": "float",
       "max": 1,
       "min": 0,
       "required": true,
@@ -53,8 +53,8 @@
       "component": "game.region-update"
     },
     "game": {
-      "via": "regions",
-      "model": "game"
+      "model": "game",
+      "via": "regions"
     },
     "index": {
       "type": "integer",

@@ -16,6 +16,21 @@ const {
  */
 
 module.exports = {
+  async gameHistory(ctx) {
+    const userId = ctx.state.user.id;
+    const companies = await strapi.query('company').find({
+      user: userId
+    }, []);
+    console.log("companies", companies)
+
+    const games = await strapi.query('game').find({
+      companies_in: _.map(companies, 'id'),
+    }, ['companies', 'fundings'])
+
+    console.log("games", games)
+    return games;
+
+  },
   async gameEntered(ctx) {
     console.log(gameEntered);
     console.log(ctx);

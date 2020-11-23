@@ -48,8 +48,8 @@
       ]
     },
     "regions": {
-      "collection": "region",
-      "via": "game"
+      "via": "game",
+      "collection": "region"
     },
     "fundings": {
       "collection": "funding",
@@ -69,6 +69,10 @@
       "type": "component",
       "repeatable": true,
       "component": "game.game-status"
+    },
+    "finished": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

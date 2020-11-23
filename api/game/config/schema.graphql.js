@@ -7,6 +7,7 @@ module.exports = {
   union GameUpdate = ComponentGameInfoUpdate | ComponentGameRegionUpdate | ComponentGameFundingUpdate | ComponentGameCompanyUpdate
   `,
   query: `
+  gameHistory: [Game]
   `,
   mutation: `
   createSimpleGame: Game
@@ -25,6 +26,10 @@ module.exports = {
       },
     },
     Query: {
+      gameHistory: {
+        policies: [],
+        resolver: 'application::game.game.gameHistory',
+      }
     },
     Mutation: {
       createSimpleGame: {

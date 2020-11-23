@@ -1096,6 +1096,10 @@
                 }
               }
             }
+          },
+          "finished": {
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -1568,6 +1572,10 @@
                 }
               }
             }
+          },
+          "finished": {
+            "type": "boolean",
+            "default": false
           },
           "created_by": {
             "type": "string"
